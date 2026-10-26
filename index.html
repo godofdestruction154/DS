@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Management System (BST) - Mini Project</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f4f7f6;
+  }
+  header {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #fff;
+    padding: 30px;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+  }
+  header h1 { margin: 0; font-size: 26px; }
+  header .subtitle { color: #bdc3c7; margin-top: 6px; font-size: 14px; }
+  .meta {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #ecf0f1;
+  }
+  .meta span { padding: 4px 10px; background: rgba(255,255,255,0.12); border-radius: 12px; }
+  main { background: #fff; padding: 25px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  h2 {
+    color: #2c3e50;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 8px;
+    margin-top: 30px;
+  }
+  h2:first-child { margin-top: 0; border: none; }
+  p { margin: 10px 0; }
+  ul { margin: 10px 0 10px 22px; }
+  li { margin-bottom: 6px; }
+
+  /* Cards */
+  .card {
+    background: #fdfdfd;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 18px;
+    margin: 18px 0;
+  }
+  .card .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #3498db;
+    margin-bottom: 10px;
+  }
+
+  /* Code block */
+  pre {
+    background: #272822;
+    color: #f8f8f2;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0;
+  }
+  code { font-family: 'Consolas', 'Monaco', monospace; }
+  .code-wrap { position: relative; }
+  .copy-hint {
+    position: absolute; top: 10px; right: 12px;
+    font-size: 12px; color: #7f8c8d;
+  }
+
+  /* Sample I/O */
+  .io {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) { .io { grid-template-columns: 1fr; } }
+  .io h3 { margin-top: 0; font-size: 15px; margin-bottom: 8px; }
+  .io .in h3 { color: #27ae60; }
+  .io .out h3 { color: #c0392b; }
+  .sample {
+    background: #f8f9fa;
+    border-left: 4px solid #bdc3c7;
+    padding: 14px;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+    border-radius: 0 6px 6px 0;
+  }
+  .io .in .sample { border-left-color: #27ae60; background: #e8f5e9; }
+  .io .out .sample { border-left-color: #c0392b; background: #fdecea; }
+
+  /* Steps */
+  .steps { counter-reset: step; list-style: none; padding: 0; margin: 14px 0; }
+  .steps li {
+    counter-increment: step;
+    padding: 10px 12px;
+    margin: 8px 0;
+    background: #ebf5fb;
+    border-radius: 6px;
+    border-left: 4px solid #3498db;
+  }
+  .steps li::before {
+    content: counter(step);
+    display: inline-block;
+    width: 22px; height: 22px;
+    background: #3498db; color: #fff;
+    border-radius: 50%;
+    text-align: center; line-height: 22px;
+    margin-right: 10px; font-weight: bold;
+  }
+
+  .highlight { color: #e67e22; font-weight: bold; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+  .badge.ds { background: #d5f5e3; color: #1e8449; }
+  .badge.c { background: #d6eaf8; color: #1f618d; }
+  .badge.struct { background: #fdebd0; color: #b7950b; }
+
+  footer {
+    margin-top: 30px;
+    padding: 18px;
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 13px;
+    border-top: 1px solid #e0e0e0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Contact Management System Using a Binary Search Tree (BST)</h1>
+  <div class="subtitle">Data Structures Mini Project &bull; C Programming &bull; College Presentation</div>
+  <div class="meta">
+    <span>Course: Data Science / Data Structures</span>
+    <span>Language: C</span>
+    <span>Structure: Binary Search Tree</span>
+  </div>
+</header>
+
+<main>
+
+  <h2>Project Overview</h2>
+  <p>
+    A menu-driven <span class="highlight">Contact Management System</span> built with a
+    <span class="highlight">Binary Search Tree (BST)</span> in C. Each contact stores a unique
+    <b>Contact ID</b>, <b>Name</b>, and <b>Phone Number</b>. Contacts are organized in the BST by
+    their unique ID, and an <b>inorder traversal</b> displays them in ascending order of ID.
+  </p>
+  <div>
+    <span class="badge ds">Data Science</span>
+    <span class="badge c">C Language</span>
+    <span class="badge struct">BST</span>
+  </div>
+
+  <h2>Problem Statement</h2>
+  <ul>
+    <li>Develop a menu-driven Contact Management System using a Binary Search Tree in C.</li>
+    <li>Each contact record contains a <b>Contact ID</b>, <b>Name</b>, and <b>Phone Number</b>.</li>
+    <li>Organize contacts in the BST based on <b>unique contact IDs</b>.</li>
+    <li>Use <b>inorder traversal</b> to display contacts in ascending order of Contact ID.</li>
+  </ul>
+
+  <h2>Features</h2>
+  <ul>
+    <li><b>1. Add</b> a new contact to the BST (IDs must be unique).</li>
+    <li><b>2. Search</b> for a contact using its Contact ID.</li>
+    <li><b>3. Delete</b> a contact using its Contact ID.</li>
+    <li><b>4. Display</b> all contacts in ascending order of Contact ID (inorder traversal).</li>
+    <li><b>5. Not-found messages</b> are shown when a contact does not exist.</li>
+    <li><b>6. Exit</b> the application.</li>
+  </ul>
+
+  <h2>Algorithm</h2>
+  <div class="card">
+    <div class="tag">BST Operations</div>
+    <ol>
+      <li><b>Create Node:</b> Allocate memory for a new BST node and store the contact (ID, name, phone). Set left and right pointers to NULL.</li>
+      <li><b>Insert:</b> If the tree is empty, the new node becomes the root. Otherwise, compare the new contact's ID with the current node's ID — go left if smaller, right if larger. Repeat until an empty spot is found. Reject duplicate IDs.</li>
+      <li><b>Search:</b> Start at the root. If the target ID equals the current node's ID, the contact is found. If smaller, search the left subtree; if larger, search the right subtree. If NULL is reached, the contact is not found.</li>
+      <li><b>Delete:</b> Find the node. Three cases:
+        <ul>
+          <li><b>Leaf node:</b> simply free the node.</li>
+          <li><b>One child:</b> replace the node with its child.</li>
+          <li><b>Two children:</b> replace the node's data with its inorder successor (smallest ID in the right subtree), then delete that successor.</li>
+        </ul>
+      </li>
+      <li><b>Display (Inorder):</b> Traverse left subtree, visit the root, then traverse the right subtree. This prints contacts in ascending order of Contact ID.</li>
+      <li>Repeat the menu until the user chooses to exit.</li>
+    </ol>
+  </div>
+
+  <h2>Data Structure</h2>
+  <div class="card">
+    <pre><code>struct Contact {
+    int id;          // BST key (unique)
+    char name[50];
+    char phone[20];
+};
+
+struct Node {
+    struct Contact data;
+    struct Node *left;
+    struct Node *right;
+};</code></pre>
+    <p>
+      <b>Invariant:</b> For every node, all IDs in the left subtree are smaller than the node's ID,
+      and all IDs in the right subtree are larger. <b>Inorder traversal</b> (left → root → right)
+      therefore visits contacts in ascending ID order.
+    </p>
+  </div>
+
+  <h2>Source Code</h2>
+  <div class="card code-wrap">
+    <div class="copy-hint">File: contact_management_system.c</div>
+    <pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+typedef struct {
+    int id;
+    char name[50];
+    char phone[20];
+} Contact;
+
+typedef struct Node {
+    Contact data;
+    struct Node *left, *right;
+} Node;
+
+Node* createNode(Contact c) {
+    Node *n = (Node*)malloc(sizeof(Node));
+    n-&gt;data = c; n-&gt;left = n-&gt;right = NULL;
+    return n;
+}
+
+Node* insert(Node *root, Contact c) {
+    if (root == NULL) return createNode(c);
+    if (c.id &lt; root-&gt;data.id) root-&gt;left = insert(root-&gt;left, c);
+    else if (c.id &gt; root-&gt;data.id) root-&gt;right = insert(root-&gt;right, c);
+    else printf("Duplicate ID %d\n", c.id);
+    return root;
+}
+
+Node* search(Node *root, int id) {
+    if (root == NULL) return NULL;
+    if (id == root-&gt;data.id) return root;
+    return id &lt; root-&gt;data.id
+        ? search(root-&gt;left, id)
+        : search(root-&gt;right, id);
+}
+
+Node* findMin(Node *root) {
+    while (root &amp;&amp; root-&gt;left) root = root-&gt;left;
+    return root;
+}
+
+Node* deleteNode(Node *root, int id) {
+    if (root == NULL) return NULL;
+    if (id &lt; root-&gt;data.id) root-&gt;left = deleteNode(root-&gt;left, id);
+    else if (id &gt; root-&gt;data.id) root-&gt;right = deleteNode(root-&gt;right, id);
+    else {
+        if (!root-&gt;left &amp;&amp; !root-&gt;right) { free(root); return NULL; }
+        if (!root-&gt;left) { Node *t = root-&gt;right; free(root); return t; }
+        if (!root-&gt;right) { Node *t = root-&gt;left; free(root); return t; }
+        Node *t = findMin(root-&gt;right);
+        root-&gt;data = t-&gt;data;
+        root-&gt;right = deleteNode(root-&gt;right, t-&gt;data.id);
+    }
+    return root;
+}
+
+void inorder(Node *root) {
+    if (root) {
+        inorder(root-&gt;left);
+        printf("ID: %d | %s | %s\n", root-&gt;data.id, root-&gt;data.name, root-&gt;data.phone);
+        inorder(root-&gt;right);
+    }
+}
+
+int main() {
+    Node *root = NULL; int choice;
+    while (1) {
+        /* menu: 1-add, 2-search, 3-delete, 4-display, 5-exit */
+        switch (choice) { /* ... see contact_management_system.c ... */ }
+    }
+    return 0;
+}</code></pre>
+    <p><i>The full compilable source is in <b>contact_management_system.c</b> in this repository.</i></p>
+  </div>
+
+  <h2>Sample Input / Output</h2>
+  <div class="io">
+    <div class="in">
+      <h3>Sample Input (menu choices)</h3>
+      <div class="sample">1   (Add)
+101 Alice Smith 9876543210
+1   (Add)
+105 Bob Jones   9123456780
+1   (Add)
+103 Carol Lee   9988776655
+4   (Display all)
+2   (Search)
+103
+3   (Delete)
+105
+4   (Display again)
+5   (Exit)</div>
+    </div>
+    <div class="out">
+      <h3>Sample Output</h3>
+      <div class="sample">Contact added successfully.
+Contact added successfully.
+Contact added successfully.
+
+--- Contact List (ascending order of ID) ---
+  ID    | Name              | Phone
+  -----------------------------------------------
+  ID: 101  | Alice Smith       | 9876543210
+  ID: 103  | Carol Lee         | 9988776655
+  ID: 105  | Bob Jones         | 9123456780
+-----------------------------------------------
+
+Contact found:
+  ID:    103
+  Name:  Carol Lee
+  Phone: 9988776655
+
+Contact with ID 105 deleted successfully.
+
+--- Contact List (ascending order of ID) ---
+  ID    | Name              | Phone
+  -----------------------------------------------
+  ID: 101  | Alice Smith       | 9876543210
+  ID: 103  | Carol Lee         | 9988776655
+-----------------------------------------------
+
+Exiting application. Goodbye!</div>
+    </div>
+  </div>
+
+  <h2>How to Compile &amp; Run (Demonstration)</h2>
+  <div class="card">
+    <pre><code>$ gcc contact_management_system.c -o cms
+$ ./cms</code></pre>
+    <p>
+      Follow the on-screen menu: choose <b>1</b> to add contacts, <b>2</b> to search, <b>3</b> to
+      delete, <b>4</b> to display all contacts in ascending ID order, and <b>5</b> to exit.
+      Try searching for an ID that does not exist to see the "Contact not found" message.
+    </p>
+  </div>
+
+</main>
+
+<footer>
+  Contact Management System (BST) &bull; Data Science Mini Project &bull; C Programming
+</footer>
+
+</body>
+</html>
