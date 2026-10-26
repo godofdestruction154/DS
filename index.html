@@ -45,7 +45,123 @@
   ul { margin: 10px 0 10px 22px; }
   li { margin-bottom: 6px; }
 
-  /* Cards */
+  /* ============ TABLE STYLE (like reference) ============ */
+  .records-card {
+    background: #fdfdfd;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 18px;
+    margin: 18px 0;
+  }
+  .records-card h2 {
+    margin-top: 0;
+    border: none;
+    font-size: 20px;
+    color: #2c3e50;
+  }
+  .records-card .desc {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+  table.records {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  table.records thead {
+    background: #2c3e50;
+    color: #fff;
+  }
+  table.records th, table.records td {
+    padding: 12px 14px;
+    text-align: left;
+    border: 1px solid #e0e0e0;
+  }
+  table.records th {
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  table.records td {
+    font-size: 14px;
+  }
+  table.records tr:nth-child(even) td {
+    background: #fafafa;
+  }
+  .btn-delete {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .btn-delete:hover { background: #c0392b; }
+
+  /* ============ BST VISUALIZATION (like reference linked list) ============ */
+  .bst-card {
+    background: #fdfdfd;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 18px;
+    margin: 18px 0;
+  }
+  .bst-card h2 {
+    margin-top: 0;
+    border: none;
+    font-size: 20px;
+    color: #2c3e50;
+  }
+  .bst-card .desc {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .bst-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 10px 0;
+  }
+  .bst-level {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+  }
+  .bst-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 150px;
+  }
+  .bst-node-box {
+    border: 2px solid #3498db;
+    background: #ebf5fb;
+    border-radius: 8px;
+    padding: 12px 16px;
+    min-width: 130px;
+    text-align: center;
+    position: relative;
+  }
+  .bst-node-id { font-weight: bold; color: #2980b9; font-size: 13px; }
+  .bst-node-name { color: #2c3e50; font-size: 14px; margin-top: 2px; }
+  .bst-node-phone { color: #7f8c8d; font-size: 12px; margin-top: 2px; }
+  .bst-arrow {
+    color: #7f8c8d;
+    font-size: 16px;
+    font-weight: bold;
+    user-select: none;
+  }
+  .bst-null { color: #7f8c8d; font-size: 14px; }
+
+  /* ============ GENERAL CARDS ============ */
   .card {
     background: #fdfdfd;
     border: 1px solid #e0e0e0;
@@ -62,8 +178,6 @@
     color: #3498db;
     margin-bottom: 10px;
   }
-
-  /* Code block */
   pre {
     background: #272822;
     color: #f8f8f2;
@@ -76,33 +190,6 @@
     margin: 12px 0;
   }
   code { font-family: 'Consolas', 'Monaco', monospace; }
-  .code-wrap { position: relative; }
-  .copy-hint {
-    position: absolute; top: 10px; right: 12px;
-    font-size: 12px; color: #7f8c8d;
-  }
-
-  /* Sample I/O */
-  .io {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  @media (max-width: 600px) { .io { grid-template-columns: 1fr; } }
-  .io h3 { margin-top: 0; font-size: 15px; margin-bottom: 8px; }
-  .io .in h3 { color: #27ae60; }
-  .io .out h3 { color: #c0392b; }
-  .sample {
-    background: #f8f9fa;
-    border-left: 4px solid #bdc3c7;
-    padding: 14px;
-    font-family: Consolas, monospace;
-    font-size: 13px;
-    white-space: pre-wrap;
-    border-radius: 0 6px 6px 0;
-  }
-  .io .in .sample { border-left-color: #27ae60; background: #e8f5e9; }
-  .io .out .sample { border-left-color: #c0392b; background: #fdecea; }
 
   /* Steps */
   .steps { counter-reset: step; list-style: none; padding: 0; margin: 14px 0; }
@@ -150,7 +237,7 @@
 <body>
 
 <header>
-  <h1>Contact Management System Using a Binary Search Tree (BST)</h1>
+  <h1>Contact Management System (BST)</h1>
   <div class="subtitle">Data Structures Mini Project &bull; C Programming &bull; College Presentation</div>
   <div class="meta">
     <span>Course: Data Science / Data Structures</span>
@@ -167,7 +254,7 @@
     <h2 style="margin-top:0;color:#2c3e50;">Download Everything</h2>
     <p>
       Want to run this project on your own computer? Download the files below.
-      <br><b>No coding experience needed</b> — just follow the Beginner's Guide at the bottom of this page.
+      <br><b>No coding experience needed</b> — just follow the Beginner's Guide further down this page.
     </p>
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
       <a href="index.html" download="Contact-Management-System-Presentation.html"
@@ -184,6 +271,80 @@
     </p>
   </div>
 
+  <!-- ============ CONTACT RECORDS TABLE (like reference) ============ -->
+  <div class="records-card">
+    <h2>Contact Records</h2>
+    <p class="desc">Contacts are stored in a Binary Search Tree (BST) ordered by unique Contact ID.</p>
+    <table class="records">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>101</td>
+          <td>Alice Smith</td>
+          <td>9876543210</td>
+          <td><button class="btn-delete">Delete</button></td>
+        </tr>
+        <tr>
+          <td>103</td>
+          <td>Carol Lee</td>
+          <td>9988776655</td>
+          <td><button class="btn-delete">Delete</button></td>
+        </tr>
+        <tr>
+          <td>105</td>
+          <td>Bob Jones</td>
+          <td>9123456780</td>
+          <td><button class="btn-delete">Delete</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============ BST VISUALIZATION (like reference linked list diagram) ============ -->
+  <div class="bst-card">
+    <h2>Binary Search Tree (BST)</h2>
+    <p class="desc">Each contact is stored inside a BST node. The tree is ordered by Contact ID — left subtree has smaller IDs, right subtree has larger IDs.</p>
+    <div class="bst-tree">
+      <!-- Root level -->
+      <div class="bst-level">
+        <div class="bst-node">
+          <div class="bst-node-box">
+            <div class="bst-node-id">ID: 103</div>
+            <div class="bst-node-name">Carol Lee</div>
+            <div class="bst-node-phone">9988776655</div>
+          </div>
+        </div>
+      </div>
+      <!-- Children level -->
+      <div class="bst-level">
+        <div class="bst-node">
+          <div class="bst-node-box">
+            <div class="bst-node-id">ID: 101</div>
+            <div class="bst-node-name">Alice Smith</div>
+            <div class="bst-node-phone">9876543210</div>
+          </div>
+        </div>
+        <span class="bst-arrow">↖</span>
+        <span class="bst-arrow">↗</span>
+        <div class="bst-node">
+          <div class="bst-node-box">
+            <div class="bst-node-id">ID: 105</div>
+            <div class="bst-node-name">Bob Jones</div>
+            <div class="bst-node-phone">9123456780</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PROJECT OVERVIEW ============ -->
   <h2>Project Overview</h2>
   <p>
     A menu-driven <span class="highlight">Contact Management System</span> built with a
@@ -255,8 +416,7 @@ struct Node {
   </div>
 
   <h2>Source Code</h2>
-  <div class="card code-wrap">
-    <div class="copy-hint">File: contact_management_system.c</div>
+  <div class="card">
     <pre><code>#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
@@ -282,7 +442,7 @@ Node* insert(Node *root, Contact c) {
     if (root == NULL) return createNode(c);
     if (c.id &lt; root-&gt;data.id) root-&gt;left = insert(root-&gt;left, c);
     else if (c.id &gt; root-&gt;data.id) root-&gt;right = insert(root-&gt;right, c);
-    else printf("Duplicate ID %d\n", c.id);
+    else printf("Duplicate ID %d\\n", c.id);
     return root;
 }
 
@@ -317,7 +477,7 @@ Node* deleteNode(Node *root, int id) {
 void inorder(Node *root) {
     if (root) {
         inorder(root-&gt;left);
-        printf("ID: %d | %s | %s\n", root-&gt;data.id, root-&gt;data.name, root-&gt;data.phone);
+        printf("ID: %d | %s | %s\\n", root-&gt;data.id, root-&gt;data.name, root-&gt;data.phone);
         inorder(root-&gt;right);
     }
 }
@@ -334,52 +494,36 @@ int main() {
   </div>
 
   <h2>Sample Input / Output</h2>
-  <div class="io">
-    <div class="in">
-      <h3>Sample Input (menu choices)</h3>
-      <div class="sample">1   (Add)
-101 Alice Smith 9876543210
-1   (Add)
-105 Bob Jones   9123456780
-1   (Add)
-103 Carol Lee   9988776655
-4   (Display all)
-2   (Search)
-103
-3   (Delete)
-105
-4   (Display again)
-5   (Exit)</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div style="background:#e8f5e9;border-left:4px solid #27ae60;padding:14px;border-radius:0 6px 6px 0;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">
+      <strong>Sample Input (menu choices)</strong><br>
+      1   (Add)<br>
+      101 Alice Smith 9876543210<br>
+      1   (Add)<br>
+      105 Bob Jones   9123456780<br>
+      1   (Add)<br>
+      103 Carol Lee   9988776655<br>
+      4   (Display all)<br>
+      2   (Search)<br>
+      103<br>
+      3   (Delete)<br>
+      105<br>
+      4   (Display again)<br>
+      5   (Exit)
     </div>
-    <div class="out">
-      <h3>Sample Output</h3>
-      <div class="sample">Contact added successfully.
-Contact added successfully.
-Contact added successfully.
-
---- Contact List (ascending order of ID) ---
-  ID    | Name              | Phone
-  -----------------------------------------------
-  ID: 101  | Alice Smith       | 9876543210
-  ID: 103  | Carol Lee         | 9988776655
-  ID: 105  | Bob Jones         | 9123456780
------------------------------------------------
-
-Contact found:
-  ID:    103
-  Name:  Carol Lee
-  Phone: 9988776655
-
-Contact with ID 105 deleted successfully.
-
---- Contact List (ascending order of ID) ---
-  ID    | Name              | Phone
-  -----------------------------------------------
-  ID: 101  | Alice Smith       | 9876543210
-  ID: 103  | Carol Lee         | 9988776655
------------------------------------------------
-
-Exiting application. Goodbye!</div>
+    <div style="background:#fdecea;border-left:4px solid #c0392b;padding:14px;border-radius:0 6px 6px 0;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;color:#333;">
+      <strong>Sample Output</strong><br>
+      Contact added successfully.<br>
+      Contact added successfully.<br>
+      Contact added successfully.<br><br>
+      --- Contact List (ascending order of ID) ---<br>
+      ID: 101  | Alice Smith  | 9876543210<br>
+      ID: 103  | Carol Lee    | 9988776655<br>
+      ID: 105  | Bob Jones    | 9123456780<br><br>
+      Contact found:<br>
+      ID: 103, Name: Carol Lee, Phone: 9988776655<br><br>
+      Contact with ID 105 deleted successfully.<br><br>
+      Exiting application. Goodbye!
     </div>
   </div>
 
