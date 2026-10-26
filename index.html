@@ -161,6 +161,29 @@
 
 <main>
 
+  <!-- ============ DOWNLOAD SECTION ============ -->
+  <div class="card" style="background:#e8f4fd;border:2px solid #3498db;">
+    <div class="tag" style="color:#2980b9;">Download the Project</div>
+    <h2 style="margin-top:0;color:#2c3e50;">Download Everything</h2>
+    <p>
+      Want to run this project on your own computer? Download the files below.
+      <br><b>No coding experience needed</b> — just follow the Beginner's Guide at the bottom of this page.
+    </p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
+      <a href="index.html" download="Contact-Management-System-Presentation.html"
+         style="background:#2c3e50;color:#fff;padding:12px 20px;border-radius:6px;text-decoration:none;font-weight:bold;display:inline-block;">
+        ⬇ Download Presentation Page (index.html)
+      </a>
+      <a href="contact_management_system.c" download="contact_management_system.c"
+         style="background:#27ae60;color:#fff;padding:12px 20px;border-radius:6px;text-decoration:none;font-weight:bold;display:inline-block;">
+        ⬇ Download C Source Code (.c file)
+      </a>
+    </div>
+    <p style="margin-top:14px;font-size:13px;color:#7f8c8d;">
+      Tip: Right-click a button and choose "Save link as..." if the automatic download does not start.
+    </p>
+  </div>
+
   <h2>Project Overview</h2>
   <p>
     A menu-driven <span class="highlight">Contact Management System</span> built with a
@@ -369,6 +392,89 @@ $ ./cms</code></pre>
       delete, <b>4</b> to display all contacts in ascending ID order, and <b>5</b> to exit.
       Try searching for an ID that does not exist to see the "Contact not found" message.
     </p>
+  </div>
+
+  <!-- ============ BEGINNER'S GUIDE ============ -->
+  <div class="card" style="background:#fdf6e3;border:2px solid #b7950b;">
+    <div class="tag" style="color:#b7950b;">Beginner's Guide</div>
+    <h2 style="margin-top:0;color:#2c3e50;">Complete Beginner's Guide (Start Here if You Are New)</h2>
+
+    <h3>What is this project?</h3>
+    <p>
+      This is a <b>Contact Management System</b>. Think of it like a digital phonebook. You can save your
+      friends' names and phone numbers, look them up later, delete them, and see the whole list sorted by ID
+      number. It is written in the <b>C programming language</b> and uses a <b>Binary Search Tree</b> — a
+      special way of organizing data so it stays sorted and fast to search.
+    </p>
+
+    <h3>What you will need</h3>
+    <ul>
+      <li>A computer (Windows, Mac, or Linux)</li>
+      <li>A <b>C compiler</b> (a free tool that turns C code into a running program)</li>
+      <li>About 10 minutes of time</li>
+    </ul>
+
+    <h3>Step 1 — Download the files</h3>
+    <p>
+      Use the download buttons at the top of this page to save:
+      <ol>
+        <li><b>contact_management_system.c</b> — the actual program code</li>
+        <li><b>index.html</b> — this presentation page (optional, for offline viewing)</li>
+      </ol>
+    </p>
+
+    <h3>Step 2 — Install a C compiler</h3>
+    <ul>
+      <li><b>Windows:</b> Download and install <b>MinGW</b> or <b>Code::Blocks</b> (it comes with a compiler).</li>
+      <li><b>Mac:</b> Open Terminal and type <code>xcode-select --install</code> to get the compiler.</li>
+      <li><b>Linux:</b> Open Terminal and type <code>sudo apt install build-essential</code>.</li>
+    </ul>
+
+    <h3>Step 3 — Save the C file</h3>
+    <p>
+      Put <b>contact_management_system.c</b> inside a folder on your computer. Remember where you saved it
+      (for example: <code>C:\Users\YourName\Documents\CMS</code> or <code>/home/yourname/cms</code>).
+    </p>
+
+    <h3>Step 4 — Compile the program</h3>
+    <p>
+      Open your command prompt or terminal, go to that folder, and type:
+    </p>
+    <pre><code>$ gcc contact_management_system.c -o cms</code></pre>
+    <p>
+      This tells the compiler: "Take the C file and create a runnable program named <b>cms</b>."
+      If there are no error messages, it worked!
+    </p>
+
+    <h3>Step 5 — Run the program</h3>
+    <pre><code>$ ./cms</code></pre>
+    <p>
+      (On Windows, type <code>cms.exe</code> instead.)
+    </p>
+    <p>
+      A menu will appear. Follow the on-screen numbers:
+      <ul>
+        <li><b>1</b> — Add a new contact</li>
+        <li><b>2</b> — Search for a contact by ID</li>
+        <li><b>3</b> — Delete a contact by ID</li>
+        <li><b>4</b> — Show all contacts (sorted by ID)</li>
+        <li><b>5</b> — Exit</li>
+      </ul>
+    </p>
+
+    <h3>Step 6 — Try it out</h3>
+    <p>
+      1. Choose <b>1</b> and add a few contacts (give each a unique ID like 101, 102, 103).<br>
+      2. Choose <b>4</b> — you will see them listed in order from smallest ID to largest.<br>
+      3. Choose <b>2</b> and type an ID to find that contact.<br>
+      4. Choose <b>3</b> and type an ID to remove that contact.<br>
+      5. Choose <b>5</b> to quit.
+    </p>
+
+    <div style="background:#e8f8f5;border:1px solid #1e8449;border-radius:6px;padding:12px;margin-top:16px;">
+      <b>💡 Beginner tip:</b> If you see an error saying <code>gcc: command not found</code>, it means the C
+      compiler is not installed yet. Go back to Step 2 and install it for your computer type.
+    </div>
   </div>
 
 </main>
