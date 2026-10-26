@@ -3,66 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact Management System (BST) - Mini Project</title>
+<title>Contact Management System (BST)</title>
 <style>
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    max-width: 950px;
-    margin: 0 auto;
-    padding: 20px;
     background: #f4f7f6;
+    color: #333;
+    padding: 30px;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 30px;
   }
   header {
-    background: linear-gradient(135deg, #2c3e50, #34495e);
-    color: #fff;
-    padding: 30px;
-    border-radius: 10px 10px 0 0;
     text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #2c3e50;
   }
-  header h1 { margin: 0; font-size: 26px; }
-  header .subtitle { color: #bdc3c7; margin-top: 6px; font-size: 14px; }
-  .meta {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 12px;
-    font-size: 13px;
-    color: #ecf0f1;
-  }
-  .meta span { padding: 4px 10px; background: rgba(255,255,255,0.12); border-radius: 12px; }
-  main { background: #fff; padding: 25px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-  h2 {
-    color: #2c3e50;
-    border-bottom: 3px solid #3498db;
-    padding-bottom: 8px;
-    margin-top: 30px;
-  }
-  h2:first-child { margin-top: 0; border: none; }
-  p { margin: 10px 0; }
-  ul { margin: 10px 0 10px 22px; }
-  li { margin-bottom: 6px; }
+  header h1 { color: #2c3e50; font-size: 24px; }
+  header p { color: #666; font-size: 14px; margin-top: 6px; }
 
-  /* ============ TABLE STYLE (like reference) ============ */
-  .records-card {
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+  .controls input {
+    padding: 10px 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    min-width: 130px;
+    outline: none;
+  }
+  .controls input:focus { border-color: #3498db; }
+  .controls button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-add { background: #3498db; color: #fff; }
+  .btn-add:hover { background: #2980b9; }
+  .btn-search { background: #2ecc71; color: #fff; }
+  .btn-search:hover { background: #27ae60; }
+  .btn-delete { background: #e74c3c; color: #fff; }
+  .btn-delete:hover { background: #c0392b; }
+  .btn-display { background: #f39c12; color: #fff; }
+  .btn-display:hover { background: #e67e22; }
+  .btn-clear { background: #95a5a6; color: #fff; }
+  .btn-clear:hover { background: #7f8c8d; }
+
+  /* Output Log */
+  .output-box {
+    background: #272822;
+    color: #f8f8f2;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 120px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+  }
+  .output-box .line { margin: 3px 0; padding: 2px 0; }
+  .output-box .ok { color: #2ecc71; }
+  .output-box .err { color: #e74c3c; }
+  .output-box .info { color: #3498db; }
+
+  /* BST Visualization */
+  .bst-card {
     background: #fdfdfd;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 18px;
-    margin: 18px 0;
+    padding: 20px;
+    margin-top: 20px;
   }
-  .records-card h2 {
-    margin-top: 0;
-    border: none;
-    font-size: 20px;
+  .bst-card h2 {
     color: #2c3e50;
+    font-size: 18px;
+    margin-bottom: 12px;
   }
-  .records-card .desc {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 14px;
+  .bst-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 0;
+  }
+  .bst-level {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+  .bst-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 150px;
+  }
+  .bst-node-box {
+    border: 2px solid #3498db;
+    background: #ebf5fb;
+    border-radius: 8px;
+    padding: 12px 16px;
+    min-width: 130px;
+    text-align: center;
+  }
+  .bst-node-box.highlight { border-color: #e74c3c; background: #fdecea; }
+  .bst-node-id { font-weight: bold; color: #2980b9; font-size: 13px; }
+  .bst-node-name { color: #2c3e50; font-size: 14px; margin-top: 2px; }
+  .bst-node-phone { color: #7f8c8d; font-size: 12px; margin-top: 2px; }
+  .bst-arrow { color: #7f8c8d; font-size: 16px; font-weight: bold; }
+  .bst-null { color: #7f8c8d; font-size: 14px; }
+  .bst-empty {
+    border: 2px dashed #95a5a6;
+    background: #ecf0f1;
+    border-radius: 8px;
+    padding: 12px 16px;
+    min-width: 130px;
+    text-align: center;
+    color: #7f8c8d;
+  }
+
+  /* Records Table */
+  .table-card {
+    background: #fdfdfd;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .table-card h2 {
+    color: #2c3e50;
+    font-size: 18px;
+    margin-bottom: 12px;
   }
   table.records {
     width: 100%;
@@ -80,17 +171,12 @@
   }
   table.records th {
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
-  table.records td {
-    font-size: 14px;
-  }
-  table.records tr:nth-child(even) td {
-    background: #fafafa;
-  }
-  .btn-delete {
+  table.records td { font-size: 14px; }
+  table.records tr:nth-child(even) td { background: #fafafa; }
+  .btn-del-table {
     background: #e74c3c;
     color: #fff;
     border: none;
@@ -100,501 +186,83 @@
     font-size: 13px;
     font-weight: 600;
   }
-  .btn-delete:hover { background: #c0392b; }
+  .btn-del-table:hover { background: #c0392b; }
 
-  /* ============ INTERACTIVE SIMULATOR ============ */
-  .sim-card {
-    background: #fdfdfd;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 18px;
-    margin: 18px 0;
-  }
-  .sim-card h2 {
-    margin-top: 0;
-    border: none;
-    font-size: 20px;
-    color: #2c3e50;
-  }
-  .sim-card .desc {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 14px;
-  }
-  .controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 14px;
-    align-items: center;
-  }
-  .controls input {
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    min-width: 110px;
-  }
-  .controls button {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 4px;
-    background: #3498db;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .controls button:hover { background: #2980b9; }
-  .controls button.secondary { background: #2ecc71; }
-  .controls button.secondary:hover { background: #27ae60; }
-  .controls button.danger { background: #e74c3c; }
-  .controls button.danger:hover { background: #c0392b; }
-  .controls button:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .output-box {
-    background: #272822;
-    color: #f8f8f2;
-    padding: 14px;
-    border-radius: 6px;
-    font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 13px;
-    line-height: 1.6;
-    min-height: 80px;
-    max-height: 320px;
-    overflow-y: auto;
-    margin-bottom: 12px;
-    border: 1px solid #333;
-  }
-  .output-box .line { margin: 2px 0; }
-  .output-box .ok { color: #2ecc71; }
-  .output-box .err { color: #e74c3c; }
-  .output-box .info { color: #3498db; }
-
-  /* BST diagram */
-  .bst-tree {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 22px;
-    padding: 14px 0;
-  }
-  .bst-level {
-    display: flex;
-    gap: 40px;
-    align-items: center;
-    position: relative;
-  }
-  .bst-node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    min-width: 150px;
-  }
-  .bst-node-box {
-    border: 2px solid #3498db;
-    background: #ebf5fb;
-    border-radius: 8px;
-    padding: 12px 16px;
-    min-width: 130px;
+  .download {
     text-align: center;
-    position: relative;
-    transition: transform 0.2s;
-  }
-  .bst-node-box.highlight { border-color: #e74c3c; background: #fdecea; }
-  .bst-node-id { font-weight: bold; color: #2980b9; font-size: 13px; }
-  .bst-node-name { color: #2c3e50; font-size: 14px; margin-top: 2px; }
-  .bst-node-phone { color: #7f8c8d; font-size: 12px; margin-top: 2px; }
-  .bst-arrow { color: #7f8c8d; font-size: 16px; font-weight: bold; user-select: none; }
-  .bst-null { color: #7f8c8d; font-size: 14px; }
-
-  /* ============ GENERAL CARDS ============ */
-  .card {
-    background: #fdfdfd;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 18px;
-    margin: 18px 0;
-  }
-  .card .tag {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #3498db;
-    margin-bottom: 10px;
-  }
-  pre {
-    background: #272822;
-    color: #f8f8f2;
-    padding: 16px;
-    border-radius: 8px;
-    overflow-x: auto;
-    font-family: 'Consolas', 'Monaco', monospace;
-    font-size: 13px;
-    line-height: 1.5;
-    margin: 12px 0;
-  }
-  code { font-family: 'Consolas', 'Monaco', monospace; }
-
-  /* Steps */
-  .steps { counter-reset: step; list-style: none; padding: 0; margin: 14px 0; }
-  .steps li {
-    counter-increment: step;
-    padding: 10px 12px;
-    margin: 8px 0;
-    background: #ebf5fb;
-    border-radius: 6px;
-    border-left: 4px solid #3498db;
-  }
-  .steps li::before {
-    content: counter(step);
-    display: inline-block;
-    width: 22px; height: 22px;
-    background: #3498db; color: #fff;
-    border-radius: 50%;
-    text-align: center; line-height: 22px;
-    margin-right: 10px; font-weight: bold;
-  }
-
-  .highlight { color: #e67e22; font-weight: bold; }
-  .badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 12px;
-    margin-right: 6px;
-    margin-bottom: 6px;
-  }
-  .badge.ds { background: #d5f5e3; color: #1e8449; }
-  .badge.c { background: #d6eaf8; color: #1f618d; }
-  .badge.struct { background: #fdebd0; color: #b7950b; }
-
-  footer {
     margin-top: 30px;
-    padding: 18px;
-    text-align: center;
-    color: #7f8c8d;
-    font-size: 13px;
-    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+    border-top: 2px solid #2c3e50;
   }
+  .download a {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .download a.html { background: #2c3e50; color: #fff; }
+  .download a.c { background: #27ae60; color: #fff; }
+  .download a:hover { opacity: 0.9; }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Contact Management System (BST)</h1>
-  <div class="subtitle">Data Structures Mini Project &bull; C Programming &bull; College Presentation</div>
-  <div class="meta">
-    <span>Course: Data Science / Data Structures</span>
-    <span>Language: C</span>
-    <span>Structure: Binary Search Tree</span>
-  </div>
-</header>
+<div class="container">
+  <header>
+    <h1>Contact Management System (BST)</h1>
+    <p>Binary Search Tree &bull; C Programming &bull; Interactive Demo</p>
+  </header>
 
-<main>
-
-  <!-- ============ DOWNLOAD SECTION ============ -->
-  <div class="card" style="background:#e8f4fd;border:2px solid #3498db;">
-    <div class="tag" style="color:#2980b9;">Download the Project</div>
-    <h2 style="margin-top:0;color:#2c3e50;">Download Everything</h2>
-    <p>
-      Want to run this project on your own computer? Download the files below.
-      <br><b>No coding experience needed</b> — just follow the Beginner's Guide further down this page.
-    </p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;">
-      <a href="index.html" download="Contact-Management-System-Presentation.html"
-         style="background:#2c3e50;color:#fff;padding:12px 20px;border-radius:6px;text-decoration:none;font-weight:bold;display:inline-block;">
-        ⬇ Download Presentation Page (index.html)
-      </a>
-      <a href="contact_management_system.c" download="contact_management_system.c"
-         style="background:#27ae60;color:#fff;padding:12px 20px;border-radius:6px;text-decoration:none;font-weight:bold;display:inline-block;">
-        ⬇ Download C Source Code (.c file)
-      </a>
-    </div>
-    <p style="margin-top:14px;font-size:13px;color:#7f8c8d;">
-      Tip: Right-click a button and choose "Save link as..." if the automatic download does not start.
-    </p>
+  <div class="controls">
+    <input type="text" id="simId" placeholder="Contact ID">
+    <input type="text" id="simName" placeholder="Name">
+    <input type="text" id="simPhone" placeholder="Phone">
+    <button class="btn-add" onclick="simAdd()">Add Contact</button>
+    <button class="btn-search" onclick="simSearch()">Search</button>
+    <button class="btn-delete" onclick="simDelete()">Delete</button>
+    <button class="btn-display" onclick="simDisplay()">Display All</button>
+    <button class="btn-clear" onclick="simClear()">Clear Log</button>
   </div>
 
-  <!-- ============ INTERACTIVE SIMULATOR (runs in browser) ============ -->
-  <div class="sim-card">
-    <h2>Try the System Live (No Terminal Needed)</h2>
-    <p class="desc">
-      This is a working model of the BST Contact Management System. Add, search, delete, and display contacts
-      directly in this web page — exactly like the C program, but running in your browser.
-    </p>
-    <div class="controls">
-      <input type="text" id="simId" placeholder="Contact ID (number)">
-      <input type="text" id="simName" placeholder="Name">
-      <input type="text" id="simPhone" placeholder="Phone">
-      <button onclick="simAdd()">Add Contact</button>
-      <button onclick="simSearch()" class="secondary">Search</button>
-      <button onclick="simDelete()" class="danger">Delete</button>
-      <button onclick="simDisplay()" class="secondary">Display All (Inorder)</button>
-      <button onclick="simClear()" style="background:#95a5a6;">Clear Log</button>
-    </div>
-    <div class="output-box" id="simOutput">
-      <div class="line info">&gt; Ready. Add contacts to get started.</div>
-    </div>
-    <div class="bst-card" style="margin-top:14px;">
-      <h2 style="margin-top:0;font-size:18px;">BST Visualization (Live)</h2>
-      <div class="bst-tree" id="simTree">
-        <div class="bst-level">
-          <div class="bst-node">
-            <div class="bst-node-box" style="border-color:#95a5a6;background:#ecf0f1;">
-              <div class="bst-node-id" style="color:#7f8c8d;">Empty</div>
-              <div class="bst-node-name" style="color:#7f8c8d;">Tree is empty</div>
-            </div>
-          </div>
+  <div class="output-box" id="simOutput">
+    <div class="line info">&gt; Ready. Add contacts to get started.</div>
+  </div>
+
+  <div class="bst-card">
+    <h2>Binary Search Tree (Live)</h2>
+    <div class="bst-tree" id="simTree">
+      <div class="bst-level">
+        <div class="bst-node">
+          <div class="bst-empty">Tree is empty</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ============ PROJECT OVERVIEW ============ -->
-  <h2>Project Overview</h2>
-  <p>
-    A menu-driven <span class="highlight">Contact Management System</span> built with a
-    <span class="highlight">Binary Search Tree (BST)</span> in C. Each contact stores a unique
-    <b>Contact ID</b>, <b>Name</b>, and <b>Phone Number</b>. Contacts are organized in the BST by
-    their unique ID, and an <b>inorder traversal</b> displays them in ascending order of ID.
-  </p>
-  <div>
-    <span class="badge ds">Data Science</span>
-    <span class="badge c">C Language</span>
-    <span class="badge struct">BST</span>
+  <div class="table-card">
+    <h2>Contact Records</h2>
+    <table class="records">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="simTable"></tbody>
+    </table>
   </div>
 
-  <h2>Problem Statement</h2>
-  <ul>
-    <li>Develop a menu-driven Contact Management System using a Binary Search Tree in C.</li>
-    <li>Each contact record contains a <b>Contact ID</b>, <b>Name</b>, and <b>Phone Number</b>.</li>
-    <li>Organize contacts in the BST based on <b>unique contact IDs</b>.</li>
-    <li>Use <b>inorder traversal</b> to display contacts in ascending order of Contact ID.</li>
-  </ul>
-
-  <h2>Features</h2>
-  <ul>
-    <li><b>1. Add</b> a new contact to the BST (IDs must be unique).</li>
-    <li><b>2. Search</b> for a contact using its Contact ID.</li>
-    <li><b>3. Delete</b> a contact using its Contact ID.</li>
-    <li><b>4. Display</b> all contacts in ascending order of Contact ID (inorder traversal).</li>
-    <li><b>5. Not-found messages</b> are shown when a contact does not exist.</li>
-    <li><b>6. Exit</b> the application.</li>
-  </ul>
-
-  <h2>Algorithm</h2>
-  <div class="card">
-    <div class="tag">BST Operations</div>
-    <ol>
-      <li><b>Create Node:</b> Allocate memory for a new BST node and store the contact (ID, name, phone). Set left and right pointers to NULL.</li>
-      <li><b>Insert:</b> If the tree is empty, the new node becomes the root. Otherwise, compare the new contact's ID with the current node's ID — go left if smaller, right if larger. Repeat until an empty spot is found. Reject duplicate IDs.</li>
-      <li><b>Search:</b> Start at the root. If the target ID equals the current node's ID, the contact is found. If smaller, search the left subtree; if larger, search the right subtree. If NULL is reached, the contact is not found.</li>
-      <li><b>Delete:</b> Find the node. Three cases:
-        <ul>
-          <li><b>Leaf node:</b> simply free the node.</li>
-          <li><b>One child:</b> replace the node with its child.</li>
-          <li><b>Two children:</b> replace the node's data with its inorder successor (smallest ID in the right subtree), then delete that successor.</li>
-        </ul>
-      </li>
-      <li><b>Display (Inorder):</b> Traverse left subtree, visit the root, then traverse the right subtree. This prints contacts in ascending order of Contact ID.</li>
-      <li>Repeat the menu until the user chooses to exit.</li>
-    </ol>
+  <div class="download">
+    <a href="index.html" download="Contact-Management-System.html" class="html">⬇ Download Page</a>
+    <a href="contact_management_system.c" download="contact_management_system.c" class="c">⬇ Download C Source</a>
   </div>
-
-  <h2>Data Structure</h2>
-  <div class="card">
-    <pre><code>struct Contact {
-    int id;          // BST key (unique)
-    char name[50];
-    char phone[20];
-};
-
-struct Node {
-    struct Contact data;
-    struct Node *left;
-    struct Node *right;
-};</code></pre>
-    <p>
-      <b>Invariant:</b> For every node, all IDs in the left subtree are smaller than the node's ID,
-      and all IDs in the right subtree are larger. <b>Inorder traversal</b> (left → root → right)
-      therefore visits contacts in ascending ID order.
-    </p>
-  </div>
-
-  <h2>Source Code</h2>
-  <div class="card">
-    <pre><code>#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;string.h&gt;
-
-typedef struct {
-    int id;
-    char name[50];
-    char phone[20];
-} Contact;
-
-typedef struct Node {
-    Contact data;
-    struct Node *left, *right;
-} Node;
-
-Node* createNode(Contact c) {
-    Node *n = (Node*)malloc(sizeof(Node));
-    n-&gt;data = c; n-&gt;left = n-&gt;right = NULL;
-    return n;
-}
-
-Node* insert(Node *root, Contact c) {
-    if (root == NULL) return createNode(c);
-    if (c.id &lt; root-&gt;data.id) root-&gt;left = insert(root-&gt;left, c);
-    else if (c.id &gt; root-&gt;data.id) root-&gt;right = insert(root-&gt;right, c);
-    else printf("Duplicate ID %d\\n", c.id);
-    return root;
-}
-
-Node* search(Node *root, int id) {
-    if (root == NULL) return NULL;
-    if (id == root-&gt;data.id) return root;
-    return id &lt; root-&gt;data.id
-        ? search(root-&gt;left, id)
-        : search(root-&gt;right, id);
-}
-
-Node* findMin(Node *root) {
-    while (root &amp;&amp; root-&gt;left) root = root-&gt;left;
-    return root;
-}
-
-Node* deleteNode(Node *root, int id) {
-    if (root == NULL) return NULL;
-    if (id &lt; root-&gt;data.id) root-&gt;left = deleteNode(root-&gt;left, id);
-    else if (id &gt; root-&gt;data.id) root-&gt;right = deleteNode(root-&gt;right, id);
-    else {
-        if (!root-&gt;left &amp;&amp; !root-&gt;right) { free(root); return NULL; }
-        if (!root-&gt;left) { Node *t = root-&gt;right; free(root); return t; }
-        if (!root-&gt;right) { Node *t = root-&gt;left; free(root); return t; }
-        Node *t = findMin(root-&gt;right);
-        root-&gt;data = t-&gt;data;
-        root-&gt;right = deleteNode(root-&gt;right, t-&gt;data.id);
-    }
-    return root;
-}
-
-void inorder(Node *root) {
-    if (root) {
-        inorder(root-&gt;left);
-        printf("ID: %d | %s | %s\\n", root-&gt;data.id, root-&gt;data.name, root-&gt;data.phone);
-        inorder(root-&gt;right);
-    }
-}
-
-int main() {
-    Node *root = NULL; int choice;
-    while (1) {
-        /* menu: 1-add, 2-search, 3-delete, 4-display, 5-exit */
-        switch (choice) { /* ... see contact_management_system.c ... */ }
-    }
-    return 0;
-}</code></pre>
-    <p><i>The full compilable source is in <b>contact_management_system.c</b> in this repository.</i></p>
-  </div>
-
-  <h2>Sample Input / Output</h2>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-    <div style="background:#e8f5e9;border-left:4px solid #27ae60;padding:14px;border-radius:0 6px 6px 0;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;">
-      <strong>Sample Input (menu choices)</strong><br>
-      1   (Add)<br>
-      101 Alice Smith 9876543210<br>
-      1   (Add)<br>
-      105 Bob Jones   9123456780<br>
-      1   (Add)<br>
-      103 Carol Lee   9988776655<br>
-      4   (Display all)<br>
-      2   (Search)<br>
-      103<br>
-      3   (Delete)<br>
-      105<br>
-      4   (Display again)<br>
-      5   (Exit)
-    </div>
-    <div style="background:#fdecea;border-left:4px solid #c0392b;padding:14px;border-radius:0 6px 6px 0;font-family:Consolas,monospace;font-size:13px;white-space:pre-wrap;color:#333;">
-      <strong>Sample Output</strong><br>
-      Contact added successfully.<br>
-      Contact added successfully.<br>
-      Contact added successfully.<br><br>
-      --- Contact List (ascending order of ID) ---<br>
-      ID: 101  | Alice Smith  | 9876543210<br>
-      ID: 103  | Carol Lee    | 9988776655<br>
-      ID: 105  | Bob Jones    | 9123456780<br><br>
-      Contact found:<br>
-      ID: 103, Name: Carol Lee, Phone: 9988776655<br><br>
-      Contact with ID 105 deleted successfully.<br><br>
-      Exiting application. Goodbye!
-    </div>
-  </div>
-
-  <h2>How to Compile &amp; Run (Demonstration)</h2>
-  <div class="card">
-    <pre><code>$ gcc contact_management_system.c -o cms
-$ ./cms</code></pre>
-    <p>
-      Follow the on-screen menu: choose <b>1</b> to add contacts, <b>2</b> to search, <b>3</b> to
-      delete, <b>4</b> to display all contacts in ascending ID order, and <b>5</b> to exit.
-      Try searching for an ID that does not exist to see the "Contact not found" message.
-    </p>
-  </div>
-
-  <!-- ============ BEGINNER'S GUIDE ============ -->
-  <div class="card" style="background:#fdf6e3;border:2px solid #b7950b;">
-    <div class="tag" style="color:#b7950b;">Beginner's Guide</div>
-    <h2 style="margin-top:0;color:#2c3e50;">Complete Beginner's Guide (Start Here if You Are New)</h2>
-
-    <h3>What is this project?</h3>
-    <p>
-      This is a <b>Contact Management System</b>. Think of it like a digital phonebook. You can save your
-      friends' names and phone numbers, look them up later, delete them, and see the whole list sorted by ID
-      number. It is written in the <b>C programming language</b> and uses a <b>Binary Search Tree</b> — a
-      special way of organizing data so it stays sorted and fast to search.
-    </p>
-
-    <h3>Option A — Use it right now in this web page</h3>
-    <p>
-      Scroll up to the <b>"Try the System Live"</b> section. Type an ID, name, and phone number, then click
-      <b>Add Contact</b>. You can search, delete, and display all contacts without installing anything.
-    </p>
-
-    <h3>Option B — Run the C program on your computer</h3>
-    <ul>
-      <li><b>Download:</b> Use the download buttons at the top to save <code>contact_management_system.c</code></li>
-      <li><b>Install a C compiler:</b> Windows → MinGW/Code::Blocks • Mac → <code>xcode-select --install</code> • Linux → <code>sudo apt install build-essential</code></li>
-      <li><b>Compile:</b> <code>gcc contact_management_system.c -o cms</code></li>
-      <li><b>Run:</b> <code>./cms</code> (or <code>cms.exe</code> on Windows)</li>
-    </ul>
-
-    <h3>How to open this web page</h3>
-    <ol class="steps">
-      <li><b>Online:</b> Click the live link at the top of this page (or the link your teacher shared). It opens in any browser — Chrome, Edge, Safari, or Firefox.</li>
-      <li><b>Offline:</b> Download <code>index.html</code> using the button above, then double-click the file. It opens in your browser immediately.</li>
-    </ol>
-
-    <div style="background:#e8f8f5;border:1px solid #1e8449;border-radius:6px;padding:12px;margin-top:16px;">
-      <b>💡 Beginner tip:</b> If you see an error saying <code>gcc: command not found</code>, it means the C
-      compiler is not installed yet. Go back to Option B and install it for your computer type.
-    </div>
-  </div>
-
-</main>
-
-<footer>
-  Contact Management System (BST) &bull; Data Science Mini Project &bull; C Programming
-</footer>
+</div>
 
 <script>
-/* ============ Interactive BST Simulator (JavaScript) ============ */
 class ContactNode {
   constructor(id, name, phone) {
     this.id = parseInt(id);
@@ -606,9 +274,7 @@ class ContactNode {
 }
 
 class ContactBST {
-  constructor() {
-    this.root = null;
-  }
+  constructor() { this.root = null; }
 
   insert(id, name, phone) {
     const idNum = parseInt(id);
@@ -638,8 +304,7 @@ class ContactBST {
   }
 
   search(id) {
-    const idNum = parseInt(id);
-    return this._searchRec(this.root, idNum);
+    return this._searchRec(this.root, parseInt(id));
   }
 
   _searchRec(node, id) {
@@ -651,9 +316,8 @@ class ContactBST {
 
   delete(id) {
     const idNum = parseInt(id);
-    const found = this.search(idNum);
-    if (!found) {
-      return { ok: false, msg: `Contact with ID ${idNum} not found. Nothing to delete.` };
+    if (!this.search(idNum)) {
+      return { ok: false, msg: `Contact with ID ${idNum} not found.` };
     }
     this.root = this._deleteRec(this.root, idNum);
     return { ok: true, msg: `Contact with ID ${idNum} deleted successfully.` };
@@ -661,32 +325,18 @@ class ContactBST {
 
   _deleteRec(node, id) {
     if (node === null) return null;
-    if (id < node.id) {
-      node.left = this._deleteRec(node.left, id);
-      return node;
-    } else if (id > node.id) {
-      node.right = this._deleteRec(node.right, id);
-      return node;
-    } else {
-      // Case 1: Leaf
-      if (node.left === null && node.right === null) return null;
-      // Case 2: One child
-      if (node.left === null) return node.right;
-      if (node.right === null) return node.left;
-      // Case 3: Two children - inorder successor
-      const successor = this._findMin(node.right);
-      node.id = successor.id;
-      node.name = successor.name;
-      node.phone = successor.phone;
-      node.right = this._deleteRec(node.right, successor.id);
-      return node;
-    }
-  }
-
-  _findMin(node) {
-    while (node.left !== null) node = node.left;
+    if (id < node.id) { node.left = this._deleteRec(node.left, id); return node; }
+    if (id > node.id) { node.right = this._deleteRec(node.right, id); return node; }
+    if (!node.left && !node.right) return null;
+    if (!node.left) return node.right;
+    if (!node.right) return node.left;
+    const successor = this._findMin(node.right);
+    node.id = successor.id; node.name = successor.name; node.phone = successor.phone;
+    node.right = this._deleteRec(node.right, successor.id);
     return node;
   }
+
+  _findMin(node) { while (node.left !== null) node = node.left; return node; }
 
   inorder() {
     const result = [];
@@ -702,13 +352,11 @@ class ContactBST {
     }
   }
 
-  getAll() {
-    return this.inorder();
-  }
+  getAll() { return this.inorder(); }
 }
 
 const bst = new ContactBST();
-let lastFoundNodeId = null;
+let lastFoundId = null;
 
 function log(text, type = 'info') {
   const out = document.getElementById('simOutput');
@@ -725,22 +373,17 @@ function clearLog() {
 }
 
 function getInputs() {
-  const id = document.getElementById('simId').value.trim();
-  const name = document.getElementById('simName').value.trim();
-  const phone = document.getElementById('simPhone').value.trim();
-  return { id, name, phone };
+  return {
+    id: document.getElementById('simId').value.trim(),
+    name: document.getElementById('simName').value.trim(),
+    phone: document.getElementById('simPhone').value.trim()
+  };
 }
 
 function simAdd() {
   const { id, name, phone } = getInputs();
-  if (!id || !name || !phone) {
-    log('Please fill in all fields (ID, Name, Phone).', 'err');
-    return;
-  }
-  if (isNaN(parseInt(id))) {
-    log('Contact ID must be a number.', 'err');
-    return;
-  }
+  if (!id || !name || !phone) { log('Please fill in all fields.', 'err'); return; }
+  if (isNaN(parseInt(id))) { log('Contact ID must be a number.', 'err'); return; }
   const res = bst.insert(id, name, phone);
   log(res.msg, res.ok ? 'ok' : 'err');
   if (res.ok) {
@@ -749,16 +392,14 @@ function simAdd() {
     document.getElementById('simPhone').value = '';
   }
   renderTree();
+  renderTable();
 }
 
 function simSearch() {
   const { id } = getInputs();
-  if (!id || isNaN(parseInt(id))) {
-    log('Please enter a valid Contact ID (number).', 'err');
-    return;
-  }
+  if (!id || isNaN(parseInt(id))) { log('Please enter a valid Contact ID.', 'err'); return; }
   const found = bst.search(id);
-  lastFoundNodeId = found ? found.id : null;
+  lastFoundId = found ? found.id : null;
   if (found) {
     log(`Contact found: ID: ${found.id} | Name: ${found.name} | Phone: ${found.phone}`, 'ok');
   } else {
@@ -769,109 +410,90 @@ function simSearch() {
 
 function simDelete() {
   const { id } = getInputs();
-  if (!id || isNaN(parseInt(id))) {
-    log('Please enter a valid Contact ID (number).', 'err');
-    return;
-  }
+  if (!id || isNaN(parseInt(id))) { log('Please enter a valid Contact ID.', 'err'); return; }
   const res = bst.delete(id);
-  lastFoundNodeId = null;
+  lastFoundId = null;
   log(res.msg, res.ok ? 'ok' : 'err');
   renderTree();
+  renderTable();
 }
 
 function simDisplay() {
   const all = bst.getAll();
-  if (all.length === 0) {
-    log('Contact list is empty.', 'info');
-  } else {
+  if (all.length === 0) { log('Contact list is empty.', 'info'); }
+  else {
     log('--- Contact List (ascending order of ID) ---', 'info');
     all.forEach(c => log(`ID: ${c.id} | ${c.name} | ${c.phone}`, 'ok'));
   }
   renderTree();
 }
 
-function simClear() {
-  clearLog();
-  renderTree();
-}
+function simClear() { clearLog(); renderTree(); renderTable(); }
 
 function renderTree() {
   const container = document.getElementById('simTree');
   const all = bst.getAll();
-
   if (all.length === 0) {
-    container.innerHTML = `
-      <div class="bst-level">
-        <div class="bst-node">
-          <div class="bst-node-box" style="border-color:#95a5a6;background:#ecf0f1;">
-            <div class="bst-node-id" style="color:#7f8c8d;">Empty</div>
-            <div class="bst-node-name" style="color:#7f8c8d;">Tree is empty</div>
-          </div>
-        </div>
-      </div>`;
+    container.innerHTML = '<div class="bst-level"><div class="bst-node"><div class="bst-empty">Tree is empty</div></div></div>';
     return;
   }
-
-  // Build a simple visual: show root and its direct children
   const root = bst.root;
   const left = root.left;
   const right = root.right;
 
   let html = '<div class="bst-tree">';
-
-  // Level 1: root
-  html += '<div class="bst-level">';
-  html += '<div class="bst-node">';
-  html += `<div class="bst-node-box ${lastFoundNodeId === root.id ? 'highlight' : ''}">`;
+  html += '<div class="bst-level"><div class="bst-node">';
+  html += `<div class="bst-node-box ${lastFoundId === root.id ? 'highlight' : ''}">`;
   html += `<div class="bst-node-id">ID: ${root.id}</div>`;
   html += `<div class="bst-node-name">${root.name}</div>`;
   html += `<div class="bst-node-phone">${root.phone}</div>`;
-  html += '</div></div>';
-  html += '</div>';
+  html += '</div></div></div>';
 
-  // Level 2: children
   if (left || right) {
     html += '<div class="bst-level">';
     if (left) {
-      html += '<div class="bst-node">';
-      html += `<div class="bst-node-box ${lastFoundNodeId === left.id ? 'highlight' : ''}">`;
+      html += '<div class="bst-node"><div class="bst-node-box">';
       html += `<div class="bst-node-id">ID: ${left.id}</div>`;
       html += `<div class="bst-node-name">${left.name}</div>`;
       html += `<div class="bst-node-phone">${left.phone}</div>`;
       html += '</div></div>';
-    } else {
-      html += '<div class="bst-node" style="visibility:hidden;"></div>';
-    }
-    // arrows only if both sides exist
-    if (left && right) {
-      html += '<span class="bst-arrow">↖</span><span class="bst-arrow">↗</span>';
-    }
+    } else { html += '<div class="bst-node" style="visibility:hidden;"></div>'; }
+    if (left && right) { html += '<span class="bst-arrow">↖</span><span class="bst-arrow">↗</span>'; }
     if (right) {
-      html += '<div class="bst-node">';
-      html += `<div class="bst-node-box ${lastFoundNodeId === right.id ? 'highlight' : ''}">`;
+      html += '<div class="bst-node"><div class="bst-node-box">';
       html += `<div class="bst-node-id">ID: ${right.id}</div>`;
       html += `<div class="bst-node-name">${right.name}</div>`;
       html += `<div class="bst-node-phone">${right.phone}</div>`;
       html += '</div></div>';
-    } else if (left && !right) {
-      html += '<div class="bst-node" style="visibility:hidden;"></div>';
-    }
+    } else if (left && !right) { html += '<div class="bst-node" style="visibility:hidden;"></div>'; }
     html += '</div>';
   }
 
-  // If deeper levels exist, show count
   const deeper = all.filter(c => c.id !== root.id && (!left || c.id !== left.id) && (!right || c.id !== right.id));
   if (deeper.length > 0) {
-    html += `<div class="bst-level" style="justify-content:center;">
-      <div class="bst-node"><div class="bst-node-box" style="border-color:#95a5a6;background:#ecf0f1;">
-        <div class="bst-node-id" style="color:#7f8c8d;">+${deeper.length}</div>
-        <div class="bst-node-name" style="color:#7f8c8d;">more contacts</div>
-        <div class="bst-node-phone" style="color:#7f8c8d;">(see list)</div>
-      </div></div></div>`;
+    html += `<div class="bst-level" style="justify-content:center;"><div class="bst-node"><div class="bst-node-box" style="border-color:#95a5a6;background:#ecf0f1;"><div class="bst-node-id" style="color:#7f8c8d;">+${deeper.length}</div><div class="bst-node-name" style="color:#7f8c8d;">more contacts</div></div></div></div>`;
   }
-
   html += '</div>';
   container.innerHTML = html;
+}
+
+function renderTable() {
+  const tbody = document.getElementById('simTable');
+  const all = bst.getAll();
+  tbody.innerHTML = '';
+  all.forEach(c => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td><button class="btn-del-table" onclick="deleteFromTable(${c.id})">Delete</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function deleteFromTable(id) {
+  const res = bst.delete(id);
+  log(res.msg, res.ok ? 'ok' : 'err');
+  lastFoundId = null;
+  renderTree();
+  renderTable();
 }
 </script>
 
