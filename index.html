@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Management System (BST)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f7f6;
+    color: #333;
+    padding: 30px;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    padding: 30px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #2c3e50;
+  }
+  header h1 { color: #2c3e50; font-size: 24px; }
+  header p { color: #666; font-size: 14px; margin-top: 6px; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+  .controls input {
+    padding: 10px 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    min-width: 130px;
+    outline: none;
+  }
+  .controls input:focus { border-color: #3498db; }
+  .controls button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-add { background: #3498db; color: #fff; }
+  .btn-add:hover { background: #2980b9; }
+  .btn-search { background: #2ecc71; color: #fff; }
+  .btn-search:hover { background: #27ae60; }
+  .btn-delete { background: #e74c3c; color: #fff; }
+  .btn-delete:hover { background: #c0392b; }
+  .btn-display { background: #f39c12; color: #fff; }
+  .btn-display:hover { background: #e67e22; }
+  .btn-clear { background: #95a5a6; color: #fff; }
+  .btn-clear:hover { background: #7f8c8d; }
+
+  /* Output Log */
+  .output-box {
+    background: #272822;
+    color: #f8f8f2;
+    padding: 16px;
+    border-radius: 8px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 120px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+  }
+  .output-box .line { margin: 3px 0; padding: 2px 0; }
+  .output-box .ok { color: #2ecc71; }
+  .output-box .err { color: #e74c3c; }
+  .output-box .info { color: #3498db; }
+
+  /* BST Visualization */
+  .bst-card {
+    background: #fdfdfd;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .bst-card h2 {
+    color: #2c3e50;
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  .bst-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 0;
+  }
+  .bst-level {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+  .bst-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 150px;
+  }
+  .bst-node-box {
+    border: 2px solid #3498db;
+    background: #ebf5fb;
+    border-radius: 8px;
+    padding: 12px 16px;
+    min-width: 130px;
+    text-align: center;
+  }
+  .bst-node-box.highlight { border-color: #e74c3c; background: #fdecea; }
+  .bst-node-id { font-weight: bold; color: #2980b9; font-size: 13px; }
+  .bst-node-name { color: #2c3e50; font-size: 14px; margin-top: 2px; }
+  .bst-node-phone { color: #7f8c8d; font-size: 12px; margin-top: 2px; }
+  .bst-arrow { color: #7f8c8d; font-size: 16px; font-weight: bold; }
+  .bst-null { color: #7f8c8d; font-size: 14px; }
+  .bst-empty {
+    border: 2px dashed #95a5a6;
+    background: #ecf0f1;
+    border-radius: 8px;
+    padding: 12px 16px;
+    min-width: 130px;
+    text-align: center;
+    color: #7f8c8d;
+  }
+
+  /* Records Table */
+  .table-card {
+    background: #fdfdfd;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  .table-card h2 {
+    color: #2c3e50;
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  table.records {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  table.records thead {
+    background: #2c3e50;
+    color: #fff;
+  }
+  table.records th, table.records td {
+    padding: 12px 14px;
+    text-align: left;
+    border: 1px solid #e0e0e0;
+  }
+  table.records th {
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+  }
+  table.records td { font-size: 14px; }
+  table.records tr:nth-child(even) td { background: #fafafa; }
+  .btn-del-table {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .btn-del-table:hover { background: #c0392b; }
+
+  .download {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #2c3e50;
+  }
+  .download a {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .download a.html { background: #2c3e50; color: #fff; }
+  .download a.c { background: #27ae60; color: #fff; }
+  .download a:hover { opacity: 0.9; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Contact Management System (BST)</h1>
+    <p>Binary Search Tree &bull; C Programming &bull; Interactive Demo</p>
+  </header>
+
+  <div class="controls">
+    <input type="text" id="simId" placeholder="Contact ID">
+    <input type="text" id="simName" placeholder="Name">
+    <input type="text" id="simPhone" placeholder="Phone">
+    <button class="btn-add" onclick="simAdd()">Add Contact</button>
+    <button class="btn-search" onclick="simSearch()">Search</button>
+    <button class="btn-delete" onclick="simDelete()">Delete</button>
+    <button class="btn-display" onclick="simDisplay()">Display All</button>
+    <button class="btn-clear" onclick="simClear()">Clear Log</button>
+  </div>
+
+  <div class="output-box" id="simOutput">
+    <div class="line info">&gt; Ready. Add contacts to get started.</div>
+  </div>
+
+  <div class="bst-card">
+    <h2>Binary Search Tree (Live)</h2>
+    <div class="bst-tree" id="simTree">
+      <div class="bst-level">
+        <div class="bst-node">
+          <div class="bst-empty">Tree is empty</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <h2>Contact Records</h2>
+    <table class="records">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="simTable"></tbody>
+    </table>
+  </div>
+
+  <div class="download">
+    <a href="index.html" download="Contact-Management-System.html" class="html">⬇ Download Page</a>
+    <a href="contact_management_system.c" download="contact_management_system.c" class="c">⬇ Download C Source</a>
+  </div>
+</div>
+
+<script>
+class ContactNode {
+  constructor(id, name, phone) {
+    this.id = parseInt(id);
+    this.name = name;
+    this.phone = phone;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+class ContactBST {
+  constructor() { this.root = null; }
+
+  insert(id, name, phone) {
+    const idNum = parseInt(id);
+    if (this.root === null) {
+      this.root = new ContactNode(idNum, name, phone);
+      return { ok: true, msg: `Contact added successfully. ID: ${idNum}`, duplicate: false };
+    }
+    return this._insertRec(this.root, idNum, name, phone);
+  }
+
+  _insertRec(node, id, name, phone) {
+    if (id < node.id) {
+      if (node.left === null) {
+        node.left = new ContactNode(id, name, phone);
+        return { ok: true, msg: `Contact added successfully. ID: ${id}`, duplicate: false };
+      }
+      return this._insertRec(node.left, id, name, phone);
+    } else if (id > node.id) {
+      if (node.right === null) {
+        node.right = new ContactNode(id, name, phone);
+        return { ok: true, msg: `Contact added successfully. ID: ${id}`, duplicate: false };
+      }
+      return this._insertRec(node.right, id, name, phone);
+    } else {
+      return { ok: false, msg: `Contact with ID ${id} already exists. IDs must be unique.`, duplicate: true };
+    }
+  }
+
+  search(id) {
+    return this._searchRec(this.root, parseInt(id));
+  }
+
+  _searchRec(node, id) {
+    if (node === null) return null;
+    if (id === node.id) return node;
+    if (id < node.id) return this._searchRec(node.left, id);
+    return this._searchRec(node.right, id);
+  }
+
+  delete(id) {
+    const idNum = parseInt(id);
+    if (!this.search(idNum)) {
+      return { ok: false, msg: `Contact with ID ${idNum} not found.` };
+    }
+    this.root = this._deleteRec(this.root, idNum);
+    return { ok: true, msg: `Contact with ID ${idNum} deleted successfully.` };
+  }
+
+  _deleteRec(node, id) {
+    if (node === null) return null;
+    if (id < node.id) { node.left = this._deleteRec(node.left, id); return node; }
+    if (id > node.id) { node.right = this._deleteRec(node.right, id); return node; }
+    if (!node.left && !node.right) return null;
+    if (!node.left) return node.right;
+    if (!node.right) return node.left;
+    const successor = this._findMin(node.right);
+    node.id = successor.id; node.name = successor.name; node.phone = successor.phone;
+    node.right = this._deleteRec(node.right, successor.id);
+    return node;
+  }
+
+  _findMin(node) { while (node.left !== null) node = node.left; return node; }
+
+  inorder() {
+    const result = [];
+    this._inorderRec(this.root, result);
+    return result;
+  }
+
+  _inorderRec(node, result) {
+    if (node !== null) {
+      this._inorderRec(node.left, result);
+      result.push({ id: node.id, name: node.name, phone: node.phone });
+      this._inorderRec(node.right, result);
+    }
+  }
+
+  getAll() { return this.inorder(); }
+}
+
+const bst = new ContactBST();
+let lastFoundId = null;
+
+function log(text, type = 'info') {
+  const out = document.getElementById('simOutput');
+  const div = document.createElement('div');
+  div.className = 'line ' + type;
+  div.textContent = '> ' + text;
+  out.appendChild(div);
+  out.scrollTop = out.scrollHeight;
+}
+
+function clearLog() {
+  document.getElementById('simOutput').innerHTML =
+    '<div class="line info">&gt; Ready. Add contacts to get started.</div>';
+}
+
+function getInputs() {
+  return {
+    id: document.getElementById('simId').value.trim(),
+    name: document.getElementById('simName').value.trim(),
+    phone: document.getElementById('simPhone').value.trim()
+  };
+}
+
+function simAdd() {
+  const { id, name, phone } = getInputs();
+  if (!id || !name || !phone) { log('Please fill in all fields.', 'err'); return; }
+  if (isNaN(parseInt(id))) { log('Contact ID must be a number.', 'err'); return; }
+  const res = bst.insert(id, name, phone);
+  log(res.msg, res.ok ? 'ok' : 'err');
+  if (res.ok) {
+    document.getElementById('simId').value = '';
+    document.getElementById('simName').value = '';
+    document.getElementById('simPhone').value = '';
+  }
+  renderTree();
+  renderTable();
+}
+
+function simSearch() {
+  const { id } = getInputs();
+  if (!id || isNaN(parseInt(id))) { log('Please enter a valid Contact ID.', 'err'); return; }
+  const found = bst.search(id);
+  lastFoundId = found ? found.id : null;
+  if (found) {
+    log(`Contact found: ID: ${found.id} | Name: ${found.name} | Phone: ${found.phone}`, 'ok');
+  } else {
+    log(`Contact with ID ${id} not found.`, 'err');
+  }
+  renderTree();
+}
+
+function simDelete() {
+  const { id } = getInputs();
+  if (!id || isNaN(parseInt(id))) { log('Please enter a valid Contact ID.', 'err'); return; }
+  const res = bst.delete(id);
+  lastFoundId = null;
+  log(res.msg, res.ok ? 'ok' : 'err');
+  renderTree();
+  renderTable();
+}
+
+function simDisplay() {
+  const all = bst.getAll();
+  if (all.length === 0) { log('Contact list is empty.', 'info'); }
+  else {
+    log('--- Contact List (ascending order of ID) ---', 'info');
+    all.forEach(c => log(`ID: ${c.id} | ${c.name} | ${c.phone}`, 'ok'));
+  }
+  renderTree();
+}
+
+function simClear() { clearLog(); renderTree(); renderTable(); }
+
+function renderTree() {
+  const container = document.getElementById('simTree');
+  const all = bst.getAll();
+  if (all.length === 0) {
+    container.innerHTML = '<div class="bst-level"><div class="bst-node"><div class="bst-empty">Tree is empty</div></div></div>';
+    return;
+  }
+  const root = bst.root;
+  const left = root.left;
+  const right = root.right;
+
+  let html = '<div class="bst-tree">';
+  html += '<div class="bst-level"><div class="bst-node">';
+  html += `<div class="bst-node-box ${lastFoundId === root.id ? 'highlight' : ''}">`;
+  html += `<div class="bst-node-id">ID: ${root.id}</div>`;
+  html += `<div class="bst-node-name">${root.name}</div>`;
+  html += `<div class="bst-node-phone">${root.phone}</div>`;
+  html += '</div></div></div>';
+
+  if (left || right) {
+    html += '<div class="bst-level">';
+    if (left) {
+      html += '<div class="bst-node"><div class="bst-node-box">';
+      html += `<div class="bst-node-id">ID: ${left.id}</div>`;
+      html += `<div class="bst-node-name">${left.name}</div>`;
+      html += `<div class="bst-node-phone">${left.phone}</div>`;
+      html += '</div></div>';
+    } else { html += '<div class="bst-node" style="visibility:hidden;"></div>'; }
+    if (left && right) { html += '<span class="bst-arrow">↖</span><span class="bst-arrow">↗</span>'; }
+    if (right) {
+      html += '<div class="bst-node"><div class="bst-node-box">';
+      html += `<div class="bst-node-id">ID: ${right.id}</div>`;
+      html += `<div class="bst-node-name">${right.name}</div>`;
+      html += `<div class="bst-node-phone">${right.phone}</div>`;
+      html += '</div></div>';
+    } else if (left && !right) { html += '<div class="bst-node" style="visibility:hidden;"></div>'; }
+    html += '</div>';
+  }
+
+  const deeper = all.filter(c => c.id !== root.id && (!left || c.id !== left.id) && (!right || c.id !== right.id));
+  if (deeper.length > 0) {
+    html += `<div class="bst-level" style="justify-content:center;"><div class="bst-node"><div class="bst-node-box" style="border-color:#95a5a6;background:#ecf0f1;"><div class="bst-node-id" style="color:#7f8c8d;">+${deeper.length}</div><div class="bst-node-name" style="color:#7f8c8d;">more contacts</div></div></div></div>`;
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function renderTable() {
+  const tbody = document.getElementById('simTable');
+  const all = bst.getAll();
+  tbody.innerHTML = '';
+  all.forEach(c => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${c.id}</td><td>${c.name}</td><td>${c.phone}</td><td><button class="btn-del-table" onclick="deleteFromTable(${c.id})">Delete</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function deleteFromTable(id) {
+  const res = bst.delete(id);
+  log(res.msg, res.ok ? 'ok' : 'err');
+  lastFoundId = null;
+  renderTree();
+  renderTable();
+}
+</script>
+
+</body>
+</html>
