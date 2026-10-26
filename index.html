@@ -10,7 +10,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: #333;
-    max-width: 900px;
+    max-width: 950px;
     margin: 0 auto;
     padding: 20px;
     background: #f4f7f6;
@@ -102,31 +102,82 @@
   }
   .btn-delete:hover { background: #c0392b; }
 
-  /* ============ BST VISUALIZATION (like reference linked list) ============ */
-  .bst-card {
+  /* ============ INTERACTIVE SIMULATOR ============ */
+  .sim-card {
     background: #fdfdfd;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 18px;
     margin: 18px 0;
   }
-  .bst-card h2 {
+  .sim-card h2 {
     margin-top: 0;
     border: none;
     font-size: 20px;
     color: #2c3e50;
   }
-  .bst-card .desc {
+  .sim-card .desc {
     color: #666;
     font-size: 14px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    align-items: center;
+  }
+  .controls input {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 110px;
+  }
+  .controls button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    background: #3498db;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .controls button:hover { background: #2980b9; }
+  .controls button.secondary { background: #2ecc71; }
+  .controls button.secondary:hover { background: #27ae60; }
+  .controls button.danger { background: #e74c3c; }
+  .controls button.danger:hover { background: #c0392b; }
+  .controls button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .output-box {
+    background: #272822;
+    color: #f8f8f2;
+    padding: 14px;
+    border-radius: 6px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 80px;
+    max-height: 320px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+    border: 1px solid #333;
+  }
+  .output-box .line { margin: 2px 0; }
+  .output-box .ok { color: #2ecc71; }
+  .output-box .err { color: #e74c3c; }
+  .output-box .info { color: #3498db; }
+
+  /* BST diagram */
   .bst-tree {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 18px;
-    padding: 10px 0;
+    gap: 22px;
+    padding: 14px 0;
   }
   .bst-level {
     display: flex;
@@ -149,16 +200,13 @@
     min-width: 130px;
     text-align: center;
     position: relative;
+    transition: transform 0.2s;
   }
+  .bst-node-box.highlight { border-color: #e74c3c; background: #fdecea; }
   .bst-node-id { font-weight: bold; color: #2980b9; font-size: 13px; }
   .bst-node-name { color: #2c3e50; font-size: 14px; margin-top: 2px; }
   .bst-node-phone { color: #7f8c8d; font-size: 12px; margin-top: 2px; }
-  .bst-arrow {
-    color: #7f8c8d;
-    font-size: 16px;
-    font-weight: bold;
-    user-select: none;
-  }
+  .bst-arrow { color: #7f8c8d; font-size: 16px; font-weight: bold; user-select: none; }
   .bst-null { color: #7f8c8d; font-size: 14px; }
 
   /* ============ GENERAL CARDS ============ */
@@ -271,73 +319,35 @@
     </p>
   </div>
 
-  <!-- ============ CONTACT RECORDS TABLE (like reference) ============ -->
-  <div class="records-card">
-    <h2>Contact Records</h2>
-    <p class="desc">Contacts are stored in a Binary Search Tree (BST) ordered by unique Contact ID.</p>
-    <table class="records">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Phone</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>101</td>
-          <td>Alice Smith</td>
-          <td>9876543210</td>
-          <td><button class="btn-delete">Delete</button></td>
-        </tr>
-        <tr>
-          <td>103</td>
-          <td>Carol Lee</td>
-          <td>9988776655</td>
-          <td><button class="btn-delete">Delete</button></td>
-        </tr>
-        <tr>
-          <td>105</td>
-          <td>Bob Jones</td>
-          <td>9123456780</td>
-          <td><button class="btn-delete">Delete</button></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- ============ BST VISUALIZATION (like reference linked list diagram) ============ -->
-  <div class="bst-card">
-    <h2>Binary Search Tree (BST)</h2>
-    <p class="desc">Each contact is stored inside a BST node. The tree is ordered by Contact ID — left subtree has smaller IDs, right subtree has larger IDs.</p>
-    <div class="bst-tree">
-      <!-- Root level -->
-      <div class="bst-level">
-        <div class="bst-node">
-          <div class="bst-node-box">
-            <div class="bst-node-id">ID: 103</div>
-            <div class="bst-node-name">Carol Lee</div>
-            <div class="bst-node-phone">9988776655</div>
-          </div>
-        </div>
-      </div>
-      <!-- Children level -->
-      <div class="bst-level">
-        <div class="bst-node">
-          <div class="bst-node-box">
-            <div class="bst-node-id">ID: 101</div>
-            <div class="bst-node-name">Alice Smith</div>
-            <div class="bst-node-phone">9876543210</div>
-          </div>
-        </div>
-        <span class="bst-arrow">↖</span>
-        <span class="bst-arrow">↗</span>
-        <div class="bst-node">
-          <div class="bst-node-box">
-            <div class="bst-node-id">ID: 105</div>
-            <div class="bst-node-name">Bob Jones</div>
-            <div class="bst-node-phone">9123456780</div>
+  <!-- ============ INTERACTIVE SIMULATOR (runs in browser) ============ -->
+  <div class="sim-card">
+    <h2>Try the System Live (No Terminal Needed)</h2>
+    <p class="desc">
+      This is a working model of the BST Contact Management System. Add, search, delete, and display contacts
+      directly in this web page — exactly like the C program, but running in your browser.
+    </p>
+    <div class="controls">
+      <input type="text" id="simId" placeholder="Contact ID (number)">
+      <input type="text" id="simName" placeholder="Name">
+      <input type="text" id="simPhone" placeholder="Phone">
+      <button onclick="simAdd()">Add Contact</button>
+      <button onclick="simSearch()" class="secondary">Search</button>
+      <button onclick="simDelete()" class="danger">Delete</button>
+      <button onclick="simDisplay()" class="secondary">Display All (Inorder)</button>
+      <button onclick="simClear()" style="background:#95a5a6;">Clear Log</button>
+    </div>
+    <div class="output-box" id="simOutput">
+      <div class="line info">&gt; Ready. Add contacts to get started.</div>
+    </div>
+    <div class="bst-card" style="margin-top:14px;">
+      <h2 style="margin-top:0;font-size:18px;">BST Visualization (Live)</h2>
+      <div class="bst-tree" id="simTree">
+        <div class="bst-level">
+          <div class="bst-node">
+            <div class="bst-node-box" style="border-color:#95a5a6;background:#ecf0f1;">
+              <div class="bst-node-id" style="color:#7f8c8d;">Empty</div>
+              <div class="bst-node-name" style="color:#7f8c8d;">Tree is empty</div>
+            </div>
           </div>
         </div>
       </div>
@@ -551,73 +561,29 @@ $ ./cms</code></pre>
       special way of organizing data so it stays sorted and fast to search.
     </p>
 
-    <h3>What you will need</h3>
+    <h3>Option A — Use it right now in this web page</h3>
+    <p>
+      Scroll up to the <b>"Try the System Live"</b> section. Type an ID, name, and phone number, then click
+      <b>Add Contact</b>. You can search, delete, and display all contacts without installing anything.
+    </p>
+
+    <h3>Option B — Run the C program on your computer</h3>
     <ul>
-      <li>A computer (Windows, Mac, or Linux)</li>
-      <li>A <b>C compiler</b> (a free tool that turns C code into a running program)</li>
-      <li>About 10 minutes of time</li>
+      <li><b>Download:</b> Use the download buttons at the top to save <code>contact_management_system.c</code></li>
+      <li><b>Install a C compiler:</b> Windows → MinGW/Code::Blocks • Mac → <code>xcode-select --install</code> • Linux → <code>sudo apt install build-essential</code></li>
+      <li><b>Compile:</b> <code>gcc contact_management_system.c -o cms</code></li>
+      <li><b>Run:</b> <code>./cms</code> (or <code>cms.exe</code> on Windows)</li>
     </ul>
 
-    <h3>Step 1 — Download the files</h3>
-    <p>
-      Use the download buttons at the top of this page to save:
-      <ol>
-        <li><b>contact_management_system.c</b> — the actual program code</li>
-        <li><b>index.html</b> — this presentation page (optional, for offline viewing)</li>
-      </ol>
-    </p>
-
-    <h3>Step 2 — Install a C compiler</h3>
-    <ul>
-      <li><b>Windows:</b> Download and install <b>MinGW</b> or <b>Code::Blocks</b> (it comes with a compiler).</li>
-      <li><b>Mac:</b> Open Terminal and type <code>xcode-select --install</code> to get the compiler.</li>
-      <li><b>Linux:</b> Open Terminal and type <code>sudo apt install build-essential</code>.</li>
-    </ul>
-
-    <h3>Step 3 — Save the C file</h3>
-    <p>
-      Put <b>contact_management_system.c</b> inside a folder on your computer. Remember where you saved it
-      (for example: <code>C:\Users\YourName\Documents\CMS</code> or <code>/home/yourname/cms</code>).
-    </p>
-
-    <h3>Step 4 — Compile the program</h3>
-    <p>
-      Open your command prompt or terminal, go to that folder, and type:
-    </p>
-    <pre><code>$ gcc contact_management_system.c -o cms</code></pre>
-    <p>
-      This tells the compiler: "Take the C file and create a runnable program named <b>cms</b>."
-      If there are no error messages, it worked!
-    </p>
-
-    <h3>Step 5 — Run the program</h3>
-    <pre><code>$ ./cms</code></pre>
-    <p>
-      (On Windows, type <code>cms.exe</code> instead.)
-    </p>
-    <p>
-      A menu will appear. Follow the on-screen numbers:
-      <ul>
-        <li><b>1</b> — Add a new contact</li>
-        <li><b>2</b> — Search for a contact by ID</li>
-        <li><b>3</b> — Delete a contact by ID</li>
-        <li><b>4</b> — Show all contacts (sorted by ID)</li>
-        <li><b>5</b> — Exit</li>
-      </ul>
-    </p>
-
-    <h3>Step 6 — Try it out</h3>
-    <p>
-      1. Choose <b>1</b> and add a few contacts (give each a unique ID like 101, 102, 103).<br>
-      2. Choose <b>4</b> — you will see them listed in order from smallest ID to largest.<br>
-      3. Choose <b>2</b> and type an ID to find that contact.<br>
-      4. Choose <b>3</b> and type an ID to remove that contact.<br>
-      5. Choose <b>5</b> to quit.
-    </p>
+    <h3>How to open this web page</h3>
+    <ol class="steps">
+      <li><b>Online:</b> Click the live link at the top of this page (or the link your teacher shared). It opens in any browser — Chrome, Edge, Safari, or Firefox.</li>
+      <li><b>Offline:</b> Download <code>index.html</code> using the button above, then double-click the file. It opens in your browser immediately.</li>
+    </ol>
 
     <div style="background:#e8f8f5;border:1px solid #1e8449;border-radius:6px;padding:12px;margin-top:16px;">
       <b>💡 Beginner tip:</b> If you see an error saying <code>gcc: command not found</code>, it means the C
-      compiler is not installed yet. Go back to Step 2 and install it for your computer type.
+      compiler is not installed yet. Go back to Option B and install it for your computer type.
     </div>
   </div>
 
@@ -626,6 +592,288 @@ $ ./cms</code></pre>
 <footer>
   Contact Management System (BST) &bull; Data Science Mini Project &bull; C Programming
 </footer>
+
+<script>
+/* ============ Interactive BST Simulator (JavaScript) ============ */
+class ContactNode {
+  constructor(id, name, phone) {
+    this.id = parseInt(id);
+    this.name = name;
+    this.phone = phone;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+class ContactBST {
+  constructor() {
+    this.root = null;
+  }
+
+  insert(id, name, phone) {
+    const idNum = parseInt(id);
+    if (this.root === null) {
+      this.root = new ContactNode(idNum, name, phone);
+      return { ok: true, msg: `Contact added successfully. ID: ${idNum}`, duplicate: false };
+    }
+    return this._insertRec(this.root, idNum, name, phone);
+  }
+
+  _insertRec(node, id, name, phone) {
+    if (id < node.id) {
+      if (node.left === null) {
+        node.left = new ContactNode(id, name, phone);
+        return { ok: true, msg: `Contact added successfully. ID: ${id}`, duplicate: false };
+      }
+      return this._insertRec(node.left, id, name, phone);
+    } else if (id > node.id) {
+      if (node.right === null) {
+        node.right = new ContactNode(id, name, phone);
+        return { ok: true, msg: `Contact added successfully. ID: ${id}`, duplicate: false };
+      }
+      return this._insertRec(node.right, id, name, phone);
+    } else {
+      return { ok: false, msg: `Contact with ID ${id} already exists. IDs must be unique.`, duplicate: true };
+    }
+  }
+
+  search(id) {
+    const idNum = parseInt(id);
+    return this._searchRec(this.root, idNum);
+  }
+
+  _searchRec(node, id) {
+    if (node === null) return null;
+    if (id === node.id) return node;
+    if (id < node.id) return this._searchRec(node.left, id);
+    return this._searchRec(node.right, id);
+  }
+
+  delete(id) {
+    const idNum = parseInt(id);
+    const found = this.search(idNum);
+    if (!found) {
+      return { ok: false, msg: `Contact with ID ${idNum} not found. Nothing to delete.` };
+    }
+    this.root = this._deleteRec(this.root, idNum);
+    return { ok: true, msg: `Contact with ID ${idNum} deleted successfully.` };
+  }
+
+  _deleteRec(node, id) {
+    if (node === null) return null;
+    if (id < node.id) {
+      node.left = this._deleteRec(node.left, id);
+      return node;
+    } else if (id > node.id) {
+      node.right = this._deleteRec(node.right, id);
+      return node;
+    } else {
+      // Case 1: Leaf
+      if (node.left === null && node.right === null) return null;
+      // Case 2: One child
+      if (node.left === null) return node.right;
+      if (node.right === null) return node.left;
+      // Case 3: Two children - inorder successor
+      const successor = this._findMin(node.right);
+      node.id = successor.id;
+      node.name = successor.name;
+      node.phone = successor.phone;
+      node.right = this._deleteRec(node.right, successor.id);
+      return node;
+    }
+  }
+
+  _findMin(node) {
+    while (node.left !== null) node = node.left;
+    return node;
+  }
+
+  inorder() {
+    const result = [];
+    this._inorderRec(this.root, result);
+    return result;
+  }
+
+  _inorderRec(node, result) {
+    if (node !== null) {
+      this._inorderRec(node.left, result);
+      result.push({ id: node.id, name: node.name, phone: node.phone });
+      this._inorderRec(node.right, result);
+    }
+  }
+
+  getAll() {
+    return this.inorder();
+  }
+}
+
+const bst = new ContactBST();
+let lastFoundNodeId = null;
+
+function log(text, type = 'info') {
+  const out = document.getElementById('simOutput');
+  const div = document.createElement('div');
+  div.className = 'line ' + type;
+  div.textContent = '> ' + text;
+  out.appendChild(div);
+  out.scrollTop = out.scrollHeight;
+}
+
+function clearLog() {
+  document.getElementById('simOutput').innerHTML =
+    '<div class="line info">&gt; Ready. Add contacts to get started.</div>';
+}
+
+function getInputs() {
+  const id = document.getElementById('simId').value.trim();
+  const name = document.getElementById('simName').value.trim();
+  const phone = document.getElementById('simPhone').value.trim();
+  return { id, name, phone };
+}
+
+function simAdd() {
+  const { id, name, phone } = getInputs();
+  if (!id || !name || !phone) {
+    log('Please fill in all fields (ID, Name, Phone).', 'err');
+    return;
+  }
+  if (isNaN(parseInt(id))) {
+    log('Contact ID must be a number.', 'err');
+    return;
+  }
+  const res = bst.insert(id, name, phone);
+  log(res.msg, res.ok ? 'ok' : 'err');
+  if (res.ok) {
+    document.getElementById('simId').value = '';
+    document.getElementById('simName').value = '';
+    document.getElementById('simPhone').value = '';
+  }
+  renderTree();
+}
+
+function simSearch() {
+  const { id } = getInputs();
+  if (!id || isNaN(parseInt(id))) {
+    log('Please enter a valid Contact ID (number).', 'err');
+    return;
+  }
+  const found = bst.search(id);
+  lastFoundNodeId = found ? found.id : null;
+  if (found) {
+    log(`Contact found: ID: ${found.id} | Name: ${found.name} | Phone: ${found.phone}`, 'ok');
+  } else {
+    log(`Contact with ID ${id} not found.`, 'err');
+  }
+  renderTree();
+}
+
+function simDelete() {
+  const { id } = getInputs();
+  if (!id || isNaN(parseInt(id))) {
+    log('Please enter a valid Contact ID (number).', 'err');
+    return;
+  }
+  const res = bst.delete(id);
+  lastFoundNodeId = null;
+  log(res.msg, res.ok ? 'ok' : 'err');
+  renderTree();
+}
+
+function simDisplay() {
+  const all = bst.getAll();
+  if (all.length === 0) {
+    log('Contact list is empty.', 'info');
+  } else {
+    log('--- Contact List (ascending order of ID) ---', 'info');
+    all.forEach(c => log(`ID: ${c.id} | ${c.name} | ${c.phone}`, 'ok'));
+  }
+  renderTree();
+}
+
+function simClear() {
+  clearLog();
+  renderTree();
+}
+
+function renderTree() {
+  const container = document.getElementById('simTree');
+  const all = bst.getAll();
+
+  if (all.length === 0) {
+    container.innerHTML = `
+      <div class="bst-level">
+        <div class="bst-node">
+          <div class="bst-node-box" style="border-color:#95a5a6;background:#ecf0f1;">
+            <div class="bst-node-id" style="color:#7f8c8d;">Empty</div>
+            <div class="bst-node-name" style="color:#7f8c8d;">Tree is empty</div>
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Build a simple visual: show root and its direct children
+  const root = bst.root;
+  const left = root.left;
+  const right = root.right;
+
+  let html = '<div class="bst-tree">';
+
+  // Level 1: root
+  html += '<div class="bst-level">';
+  html += '<div class="bst-node">';
+  html += `<div class="bst-node-box ${lastFoundNodeId === root.id ? 'highlight' : ''}">`;
+  html += `<div class="bst-node-id">ID: ${root.id}</div>`;
+  html += `<div class="bst-node-name">${root.name}</div>`;
+  html += `<div class="bst-node-phone">${root.phone}</div>`;
+  html += '</div></div>';
+  html += '</div>';
+
+  // Level 2: children
+  if (left || right) {
+    html += '<div class="bst-level">';
+    if (left) {
+      html += '<div class="bst-node">';
+      html += `<div class="bst-node-box ${lastFoundNodeId === left.id ? 'highlight' : ''}">`;
+      html += `<div class="bst-node-id">ID: ${left.id}</div>`;
+      html += `<div class="bst-node-name">${left.name}</div>`;
+      html += `<div class="bst-node-phone">${left.phone}</div>`;
+      html += '</div></div>';
+    } else {
+      html += '<div class="bst-node" style="visibility:hidden;"></div>';
+    }
+    // arrows only if both sides exist
+    if (left && right) {
+      html += '<span class="bst-arrow">↖</span><span class="bst-arrow">↗</span>';
+    }
+    if (right) {
+      html += '<div class="bst-node">';
+      html += `<div class="bst-node-box ${lastFoundNodeId === right.id ? 'highlight' : ''}">`;
+      html += `<div class="bst-node-id">ID: ${right.id}</div>`;
+      html += `<div class="bst-node-name">${right.name}</div>`;
+      html += `<div class="bst-node-phone">${right.phone}</div>`;
+      html += '</div></div>';
+    } else if (left && !right) {
+      html += '<div class="bst-node" style="visibility:hidden;"></div>';
+    }
+    html += '</div>';
+  }
+
+  // If deeper levels exist, show count
+  const deeper = all.filter(c => c.id !== root.id && (!left || c.id !== left.id) && (!right || c.id !== right.id));
+  if (deeper.length > 0) {
+    html += `<div class="bst-level" style="justify-content:center;">
+      <div class="bst-node"><div class="bst-node-box" style="border-color:#95a5a6;background:#ecf0f1;">
+        <div class="bst-node-id" style="color:#7f8c8d;">+${deeper.length}</div>
+        <div class="bst-node-name" style="color:#7f8c8d;">more contacts</div>
+        <div class="bst-node-phone" style="color:#7f8c8d;">(see list)</div>
+      </div></div></div>`;
+  }
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+</script>
 
 </body>
 </html>
