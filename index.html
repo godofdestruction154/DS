@@ -141,6 +141,115 @@
     text-align: center;
     color: #7f8c8d;
   }
+  .bst-expand-button {
+    border-color: #95a5a6;
+    background: #ecf0f1;
+    color: #7f8c8d;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .bst-expand-button:hover,
+  .bst-expand-button:focus-visible {
+    border-color: #3498db;
+    background: #ebf5fb;
+    outline: none;
+  }
+  .bst-expand-button .bst-node-id,
+  .bst-expand-button .bst-node-name {
+    display: block;
+    color: #7f8c8d;
+  }
+  .bst-expand-hint {
+    display: block;
+    color: #3498db;
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+  .bst-collapse-wrap { text-align: center; padding-top: 16px; }
+  .bst-collapse-button {
+    border: 1px solid #95a5a6;
+    background: #ecf0f1;
+    color: #2c3e50;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font: 600 13px 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    cursor: pointer;
+  }
+  .bst-collapse-button:hover,
+  .bst-collapse-button:focus-visible {
+    border-color: #3498db;
+    background: #ebf5fb;
+    outline: none;
+  }
+
+  /* Expanded tree: one recursive branch for every node. */
+  .bst-full-tree {
+    width: 100%;
+    overflow-x: auto;
+    padding: 14px 4px 20px;
+    text-align: center;
+  }
+  .bst-full-tree ul {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding-top: 32px;
+  }
+  .bst-full-tree > ul { padding-top: 0; }
+  .bst-full-tree li {
+    position: relative;
+    list-style: none;
+    min-width: 146px;
+    padding: 32px 8px 0;
+    text-align: center;
+  }
+  .bst-full-tree > ul > li { padding-top: 0; }
+  .bst-full-tree .bst-node-box {
+    display: inline-block;
+    min-width: 130px;
+    vertical-align: top;
+  }
+  .bst-full-tree li::before,
+  .bst-full-tree li::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 50%;
+    width: 50%;
+    height: 32px;
+    border-top: 2px solid #95a5a6;
+  }
+  .bst-full-tree li::after {
+    right: auto;
+    left: 50%;
+    border-left: 2px solid #95a5a6;
+  }
+  .bst-full-tree li:only-child::before,
+  .bst-full-tree li:only-child::after { display: none; }
+  .bst-full-tree li:only-child { padding-top: 0; }
+  .bst-full-tree li:first-child::before,
+  .bst-full-tree li:last-child::after { border: 0; }
+  .bst-full-tree li:last-child::before { border-right: 2px solid #95a5a6; }
+  .bst-full-tree ul ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 32px;
+    border-left: 2px solid #95a5a6;
+  }
+  .bst-full-tree .bst-null-leaf .bst-null {
+    display: inline-block;
+    border: 1px dashed #b2babb;
+    border-radius: 6px;
+    color: #95a5a6;
+    font-size: 11px;
+    padding: 8px 12px;
+  }
 
   /* Records Table */
   .table-card {
@@ -357,6 +466,7 @@ class ContactBST {
 
 const bst = new ContactBST();
 let lastFoundId = null;
+let isTreeExpanded = false;
 
 function log(text, type = 'info') {
   const out = document.getElementById('simOutput');
@@ -430,13 +540,53 @@ function simDisplay() {
 
 function simClear() { clearLog(); renderTree(); renderTable(); }
 
+function toggleTree() {
+  isTreeExpanded = !isTreeExpanded;
+  renderTree();
+}
+
+function renderFullNode(node) {
+  let html = '<li>';
+  html += `<div class="bst-node-box ${lastFoundId === node.id ? 'highlight' : ''}">`;
+  html += `<div class="bst-node-id">ID: ${node.id}</div>`;
+  html += `<div class="bst-node-name">${node.name}</div>`;
+  html += `<div class="bst-node-phone">${node.phone}</div>`;
+  html += '</div>';
+
+  if (node.left || node.right) {
+    html += '<ul>';
+    html += node.left
+      ? renderFullNode(node.left)
+      : '<li class="bst-null-leaf"><span class="bst-null">NULL</span></li>';
+    html += node.right
+      ? renderFullNode(node.right)
+      : '<li class="bst-null-leaf"><span class="bst-null">NULL</span></li>';
+    html += '</ul>';
+  }
+
+  return html + '</li>';
+}
+
 function renderTree() {
   const container = document.getElementById('simTree');
   const all = bst.getAll();
   if (all.length === 0) {
+    isTreeExpanded = false;
     container.innerHTML = '<div class="bst-level"><div class="bst-node"><div class="bst-empty">Tree is empty</div></div></div>';
     return;
   }
+
+  // Keep the original compact view unless the user asks to expand it.
+  if (all.length <= 3) isTreeExpanded = false;
+  if (isTreeExpanded) {
+    container.innerHTML =
+      `<div class="bst-full-tree"><ul>${renderFullNode(bst.root)}</ul></div>` +
+      '<div class="bst-collapse-wrap">' +
+      '<button type="button" class="bst-collapse-button" onclick="toggleTree()" aria-expanded="true">▲ Show compact tree</button>' +
+      '</div>';
+    return;
+  }
+
   const root = bst.root;
   const left = root.left;
   const right = root.right;
@@ -471,7 +621,12 @@ function renderTree() {
 
   const deeper = all.filter(c => c.id !== root.id && (!left || c.id !== left.id) && (!right || c.id !== right.id));
   if (deeper.length > 0) {
-    html += `<div class="bst-level" style="justify-content:center;"><div class="bst-node"><div class="bst-node-box" style="border-color:#95a5a6;background:#ecf0f1;"><div class="bst-node-id" style="color:#7f8c8d;">+${deeper.length}</div><div class="bst-node-name" style="color:#7f8c8d;">more contacts</div></div></div></div>`;
+    html += '<div class="bst-level" style="justify-content:center;"><div class="bst-node">';
+    html += `<button type="button" class="bst-node-box bst-expand-button" onclick="toggleTree()" aria-expanded="false" aria-label="Expand the full tree with ${all.length} contacts">`;
+    html += `<span class="bst-node-id">+${deeper.length}</span>`;
+    html += '<span class="bst-node-name">more contacts</span>';
+    html += '<span class="bst-expand-hint">Click to expand</span>';
+    html += '</button></div></div>';
   }
   html += '</div>';
   container.innerHTML = html;
