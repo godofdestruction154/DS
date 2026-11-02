@@ -462,9 +462,24 @@ class ContactBST {
   }
 
   getAll() { return this.inorder(); }
+
+  preorder() {
+    const result = [];
+    this._preorderRec(this.root, result);
+    return result;
+  }
+
+  _preorderRec(node, result) {
+    if (node !== null) {
+      result.push({ id: node.id, name: node.name, phone: node.phone });
+      this._preorderRec(node.left, result);
+      this._preorderRec(node.right, result);
+    }
+  }
 }
 
 const bst = new ContactBST();
+const STORAGE_KEY = 'contactManagementSystem.bst.v1';
 let lastFoundId = null;
 let isTreeExpanded = false;
 
@@ -480,6 +495,47 @@ function log(text, type = 'info') {
 function clearLog() {
   document.getElementById('simOutput').innerHTML =
     '<div class="line info">&gt; Ready. Add contacts to get started.</div>';
+}
+
+function saveContacts() {
+  try {
+    // Preorder keeps the root before its children, preserving the tree shape.
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(bst.preorder()));
+  } catch (error) {
+    log('Could not save contacts in this browser. Changes will last only for this session.', 'err');
+  }
+}
+
+function loadContacts() {
+  let saved;
+  try {
+    saved = localStorage.getItem(STORAGE_KEY);
+  } catch (error) {
+    log('Browser storage is unavailable. Contacts will not be saved after refresh.', 'err');
+    return;
+  }
+
+  if (!saved) return;
+
+  try {
+    const contacts = JSON.parse(saved);
+    if (!Array.isArray(contacts)) throw new Error('Invalid saved data');
+
+    let loaded = 0;
+    contacts.forEach(contact => {
+      const valid = contact &&
+        Number.isInteger(contact.id) &&
+        typeof contact.name === 'string' && contact.name.trim() &&
+        typeof contact.phone === 'string' && contact.phone.trim();
+      if (valid && bst.insert(contact.id, contact.name, contact.phone).ok) loaded++;
+    });
+
+    if (loaded > 0) {
+      log(`Restored ${loaded} saved contact${loaded === 1 ? '' : 's'} from this browser.`, 'info');
+    }
+  } catch (error) {
+    log('Saved contacts could not be loaded. You can continue adding new contacts.', 'err');
+  }
 }
 
 function getInputs() {
@@ -500,6 +556,7 @@ function simAdd() {
     document.getElementById('simId').value = '';
     document.getElementById('simName').value = '';
     document.getElementById('simPhone').value = '';
+    saveContacts();
   }
   renderTree();
   renderTable();
@@ -524,6 +581,7 @@ function simDelete() {
   const res = bst.delete(id);
   lastFoundId = null;
   log(res.msg, res.ok ? 'ok' : 'err');
+  if (res.ok) saveContacts();
   renderTree();
   renderTable();
 }
@@ -647,9 +705,15 @@ function deleteFromTable(id) {
   const res = bst.delete(id);
   log(res.msg, res.ok ? 'ok' : 'err');
   lastFoundId = null;
+  if (res.ok) saveContacts();
   renderTree();
   renderTable();
 }
+
+// Restore contacts and render the saved tree as soon as the page opens.
+loadContacts();
+renderTree();
+renderTable();
 </script>
 
 </body>
