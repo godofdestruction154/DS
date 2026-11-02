@@ -14,6 +14,17 @@ This is a working Contact Management System built with a **Binary Search Tree (B
 | **Display All** | Click **Display All** to see every contact sorted in ascending order of ID (inorder traversal). |
 | **BST Visualization** | A live tree diagram shows the root and child nodes. When you search, the found node is highlighted in red. |
 | **Contact Table** | A table lists all contacts with a Delete button for each row. |
+| **Automatic Browser Storage** | Contacts are saved after every successful add/delete and restored automatically when the page is reopened in the same browser. |
+
+## Browser Storage
+
+The website uses the browser's **localStorage** to save contacts. No database server or installation is required, and it works with GitHub Pages.
+
+- Data remains available after refreshing or reopening the page on the same browser and device.
+- Each website address (origin) has its own saved data.
+- Data is not shared between different browsers, devices, or users.
+- Clearing the browser's site data will also delete the saved contacts.
+- The BST is stored in preorder so its structure is preserved when contacts are loaded again.
 
 ## How the BST Works
 
